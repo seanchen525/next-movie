@@ -1,5 +1,6 @@
 mongoCollections = require("../config/mongoCollections");
 Users = mongoCollections.Users;
+var uuid = require('node-uuid');
 
 var exportedMethods = {
     getAllUser() {
@@ -22,6 +23,8 @@ var exportedMethods = {
 	
 	addUsers(obj) {
         return Users().then((userCollection) => {
+        	obj["_id"]=uuid.v4();
+            obj["profile"]["_id"]= obj["_id"];
             return userCollection.insertOne(obj).then((userObj) => {
                return userObj.insertedId;
             }).then(newId=>{
@@ -54,67 +57,6 @@ var exportedMethods = {
 		})
 	}
 
-	/*
-	
-	getCommentByRecipeId(id){
-		return recipe().then((recipeCollection) => {
-            return recipeCollection.findOne({ _id: id }).then(function(recipeObj) {
-				if(!recipeObj) throw "Could not find the document with this id";
-            	var commentlist=recipeObj.comments;
-				var array=[];
-				for(var i=0;i<commentlist.length;i++){
-					var obj={};
-					obj['_id']=commentlist[i]._id;
-					obj['recipeId']=recipeObj._id;
-					obj['recipeTitle']=recipeObj.title;
-					obj['name']=commentlist[i].comment;
-					obj['poster']=commentlist[i].poster;
-					array[i]=obj;
-				}
-            	return array;
-        	});
-        }).catch((error)=>{
-			return {error:error};
-		})
-	},
-	
-	getCommentByCommentId(id){
-		return recipe().then((recipeCollection) => {
-            return recipeCollection.find({ "comments._id":id }).toArray();
-        }).catch((error)=>{
-			return {error:error};
-		})
-	},
-	
-	addComment(id,obj){
-		return recipe().then((recipeCollection) => {
-            return recipeCollection.update({ _id: id }, { $push: { "comments": obj } }).then(function() {
-                return obj;
-            }).catch((error)=>{
-				return {error:error};
-			});
-        })
-	},
-	
-	updateComment(rid,cid,obj){
-		return recipe().then((recipeCollection) => {
-            return recipeCollection.update({ _id: rid,comments:{$elemMatch: {_id:cid }}}, { $set: { "comments.$": obj } }).then(function() {
-                return obj;
-            }).catch((error)=>{
-				return {error:error};
-			});
-        })
-	},
-	
-	deleteCommentById(id,cid){
-		return recipe().then((recipeCollection) => {
-            return recipeCollection.update({ _id: id }, { $pull: { "comments": { _id: cid } } }).then(function() {
-                return "sucess";
-            }).catch((error)=>{
-				return {error:error};
-			});
-        })
-	}  **/
 }
 
 module.exports = exportedMethods;
