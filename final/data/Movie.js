@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-let exportedMethods = {
-    
-};
-=======
+
 mongoCollections = require("../config/mongoCollections");
 Movie = mongoCollections.Movie;
 var uuid = require('node-uuid');
@@ -120,6 +116,5 @@ var exportedMethods = {
     },
 
 }
->>>>>>> e4c46dc2ca7a036798d3b6ad08c15e5d5bc9b40f
 
 module.exports = exportedMethods;
