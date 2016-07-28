@@ -3,6 +3,10 @@ mongoCollections = require("../config/mongoCollections");
 Movie = mongoCollections.Movie;
 var uuid = require('node-uuid');
 
+var https = require("https");
+var pathTail = "?api_key=4b9df4187f2ee368c196c4a4247fc1aa";
+var restHost = "https://api.themoviedb.org/3";
+
 var exportedMethods = {
     getAllMovie() {
         return Movie().then((movieCollection) => {
@@ -115,6 +119,107 @@ var exportedMethods = {
         });
     },
 
+    getMovieByMultiParams(paramObj){
+        let queryStr = "";
+        for (var key in paramObj){
+            if (paramObj[key] != null && paramObj[key] != "" && paramObj[key] != undefined){
+                queryStr += "&with_" + key + "=" + paramObj[key];
+            }
+        }
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/discover/movie" + pathTail + queryStr, (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data).results;
+                    fulfill(rs);
+                });
+            });
+        });
+    },
+    
+    getKeywordsByMovieId(id){
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/movie/" + id + "/keywords" + pathTail, (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data).keywords;
+                    fulfill(rs);
+                });
+            });
+        });
+    },
+    
+    getReviewsByMovieId(id){
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/movie/" + id + "/reviews" + pathTail, (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data).results;
+                    fulfill(rs);
+                });
+            });
+        });
+    },
+    
+    getCreditsByMovieId(id){
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/movie/" + id + "/credits" + pathTail, (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data);
+                    fulfill(rs);
+                });
+            });
+        });
+    },
+    
+    getPopularMovies(){
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/movie/popular" + pathTail, (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data).results;
+                    fulfill(rs);
+                });
+            });
+        });
+    },
+    
+    getUpcomingMovies(){
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/movie/upcoming" + pathTail, (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data).results;
+                    fulfill(rs);
+                });
+            });
+        });
+    }
 }
 
 module.exports = exportedMethods;
