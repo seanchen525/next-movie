@@ -48,6 +48,9 @@ new Promise((fulfill, reject) => {
             });
         }).then((movies) => {
             for (var i = 0; i < listOfMovie.length; i++){
+                if (i == 10){
+                    pathTail = "";//change api key 
+                }
                 loopMovies(i);
             }
         });
@@ -120,7 +123,8 @@ function loopMovies(index){
             }); 
         });
     }).then(() => {
-        console.log(listOfMovie[index]);
+        console.log(listOfMovie[index]._id);
+        movie.updateMovieById(listOfMovie[index]._id, listOfMovie[index])
     });
 }
 
