@@ -1,0 +1,47 @@
+<div class="playlist">
+    <h1>{{ playlist.title }}</h1>
+    {{#if movies.length}}
+        <div class="clear-list">
+        <button type="button" id={{playlist._id}} class="clear" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span>
+        Clear Playlist
+            </button>
+            </div>   
+        {{#if unviewed.length}}
+            <h3>Movies to watch:</h3>
+            {{#each unviewed}}
+            <ul class="not_viewed">
+                <li>
+            <input type="checkbox" id= {{this._id}} class="check-off">
+            <label for="check-off">Viewed?</label><br>
+            <label for="title" class="movie_title">{{this.title}}</label>
+            <label for="overview">{{this.overview}}</label>
+          <div class="playlist_buttons">
+        <button type="button" id={{this._id}} class="delete" class="btn btn-default"><span class="glyphicon glyphicon-remove-sign"></span>
+        Remove
+            </button>
+        <button type="button" id={{this._id}} class="review" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+        Add Review
+            </button>
+            </div>
+                </li>
+            </ul>
+            {{/each}}
+        {{/if}}
+           {{#if viewed.length}}
+            <h3>Movies viewed:</h3>
+            {{#each viewed}}
+            <ul class="viewed">
+                <li>
+            <label for="title">{{this.title}}</label>
+            {{#if this.review.length}}
+            <label for="review">Your Review:</label>
+            <input type="text" id={{this._id}}>
+            {{/if}}
+            </li>
+            </ul>
+            {{/each}}
+        {{/if}}
+    {{else}}
+    <h4>No movies are currently in your playlist</h4>
+    {{/if}}
+</div>

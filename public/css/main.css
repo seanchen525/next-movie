@@ -1,0 +1,74 @@
+.movie_info{
+    margin-bottom: 100px;   
+    list-style-type: none;
+}
+
+img {
+    float: left;
+    height: auto; 
+    width: auto; 
+    max-width: 300px; 
+    max-height: 300px;
+}
+.add, .details, .reviews{
+    width: 10em;
+    display: block;
+    background-color: #3498DB;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+/*.buttons{
+    float: left;
+    margin-right: 5px;
+}*/
+
+.delete{
+    width: 10em;
+    display: inline-block;
+    background-color: #C70039;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+.clear{
+    width: 10em;
+    display: block;
+    background-color: black;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+.movie_title{
+    font-size: 15px;
+}
+
+.review{
+    width: 10em;
+    display: inline-block;
+    background-color: #3498DB;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+#search{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+}
