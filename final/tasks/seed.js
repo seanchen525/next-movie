@@ -47,24 +47,82 @@ new Promise((fulfill, reject) => {
                 return movieCollection.find().toArray();
             });
         }).then((movies) => {
-            /*
-            https.get(restHost + "/movie/" + listOfMovie[i] + "/keywords" + pathTail, (res) => {
-                res.setEncoding('utf8');
-                var _data = '';
-                res.on('data', (d) => {
-                    _data += d;
-                });
-                res.on('end', () => {
-                    var rs = JSON.parse(_data).results;
-                });
-            });
-            */
+            for (var i = 0; i < listOfMovie.length; i++){
+                loopMovies(i);
+            }
         });
     }, (error) => {
         console.error(error);
     });
 });
 
+function loopMovies(index){
+    return new Promise((fulfill, reject) => {
+        https.get(restHost + "/movie/" + listOfMovie[index].id + "/keywords" + pathTail, (res) => {
+            res.setEncoding('utf8');
+            var _data = '';
+            res.on('data', (d) => {
+                _data += d;
+            });
+            res.on('end', () => {
+                var rs = JSON.parse(_data).keywords;
+                var keywordVal = [];
+                for (var i = 0; i < rs.length; i++){
+                    keywordVal.push(rs[i].name);
+                }
+                listOfMovie[index].keywords = keywordVal;
+                fulfill(rs);
+            });
+        }); 
+    }).then(() => {
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/movie/" + listOfMovie[index].id + pathTail, (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data);
+                    var genreVal = [];
+                    for (var i = 0; i < rs.genres.length; i++){
+                        genreVal.push(rs.genres[i].name);
+                    }
+                    listOfMovie[index].genre = genreVal;
+                    listOfMovie[index].runtime = rs.runtime;
+                    fulfill(rs);
+                });
+            }); 
+        });
+    }).then(() => {
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/movie/" + listOfMovie[index].id + "/credits" + pathTail, (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data);
+                    var castVal = [];
+                    for (var i = 0; i < rs.cast.length; i++){
+                        castVal.push(rs.cast[i].name);
+                    }
+                    listOfMovie[index].cast = castVal;
+                    
+                    for (var i = 0; i < rs.crew.length; i++){
+                        if (rs.crew[i].job == "Director"){
+                            listOfMovie[index].director = rs.crew[i].name;
+                        }
+                    }
+                    fulfill(rs);
+                });
+            }); 
+        });
+    }).then(() => {
+        console.log(listOfMovie[index]);
+    });
+}
 
 /*
 var paramObj = {
