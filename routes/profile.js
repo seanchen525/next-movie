@@ -72,7 +72,7 @@ router.post("/:userId", (req, res) => {
         result.then((movies) => {
             let movielist = form.formatReleaseDate(movies.results);
             let total = movies.total_results;
-            res.render("results/movielist", { movies: movielist, total: total, partial: "results-script" });
+            res.render("results/movielist", { userId: userId, movies: movielist, total: total, partial: "results-script" });
         }).catch((e) => {
             res.render("profile/preferences", {
                 title: title, actors: actors, genres: genre, director: director,
@@ -92,7 +92,7 @@ router.post("/:userId", (req, res) => {
             }
             let movielist = form.formatReleaseDate(movies.results);
             let total = movies.total_results;
-            res.render("results/movielist", { movies: movielist, total: total, partial: "results-script" });
+            res.render("results/movielist", { userId: userId, movies: movielist, total: total, partial: "results-script" });
         }).catch((e) => {
             res.render("profile/preferences", {
                 title: title, actors: actors, genres: genre, director: director,

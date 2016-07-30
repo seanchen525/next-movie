@@ -13,42 +13,50 @@
 
     checkOffMovie.click(function () {
         let movieId = this.id;
-        $.ajax({
+
+        var flagMovie = {
+            method: "PUT",
             url: '/playlist/movie/' + movieId,
-            type: 'PUT',
-            success: function (response) {
+        };
+
+        $.ajax(flagMovie).then(function (response) {
+            if (response.success == true) {
                 window.location.reload(true);
             }
         });
-
     });
 
     clearPlaylist.click(function () {
         let playlistId = this.id;
         let verify = confirm("Are you sure you want to remove all movies from your playlist?")
         if (verify) { //clicked Ok
-            $.ajax({
+            var clearList = {
+                method: "DELETE",
                 url: '/playlist/' + playlistId,
-                type: 'PUT',
-                success: function (response) {
+            };
+
+            $.ajax(clearList).then(function (response) {
+                if (response.success == true) {
                     window.location.reload(true);
                 }
             });
         }
     });
 
-    //close button to close out of more details and read reviews
-
     removeMovie.click(function () {
         let movieId = this.id;
-        $.ajax({
+
+        var removeMovie = {
+            method: "DELETE",
             url: '/playlist/movie/' + movieId,
-            type: 'DELETE',
-            success: function (response) {
+        };
+
+        $.ajax(removeMovie).then(function (response) {
+            if (response.success == true) {
                 window.location.reload(true);
             }
         });
-
     });
+
 
 })(jQuery, window.location);

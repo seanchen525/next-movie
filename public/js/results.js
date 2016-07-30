@@ -4,20 +4,25 @@
     var addToPlaylist = $(".add");
     var readReviews = $(".reviews");
     var moreDetails = $(".details");
-    //var reviewElement = $("review");
+    var userId = $(".results").attr('id');
 
     addToPlaylist.click(function () {
         var movieId = this.id;
-        $.post('/playlist/' + movieId, function (data) {
-            // console.log(data);
-        });
-        alert("Movie has been added to your playlist")
 
+        var addMovie = {
+            method: "POST",
+            url: '/playlist/' + userId + '/' + movieId,
+        };
+
+        $.ajax(addMovie).then(function (response) {
+            if (response.success == true) {
+                alert("Movie has been added to your playlist")
+            }
+        });
     });
 
     readReviews.click(function () {
         var movieId = this.id;
-        console.log(movieId);
         let allReviews = [];
         $.get('/playlist/reviews/' + movieId, function (data) {
             let reviews = data;

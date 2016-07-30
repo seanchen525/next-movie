@@ -6,7 +6,6 @@ const playlist = data.playlist;
 const user = data.users;
 const profile = data.profile;
 let listId = " ";
-let userId = profile.userId;
 
 router.get("/:playlistId", (req, res) => {
     //get playlist information
@@ -34,12 +33,14 @@ router.get("/:playlistId", (req, res) => {
     });
 });
 
-router.put("/:playlistId", (req, res) => {
+router.delete("/:playlistId", (req, res) => {
     //method to clear out playlist
     let playlistId = req.params.playlistId;
     let clearList = playlist.clearPlaylist(playlistId);
     clearList.then((emptyList) => {
-        res.sendStatus(200);
+        res.json({ success: true });
+    }).catch((error) => {
+        res.json({ success: false, error: error });
     });
 });
 
@@ -49,7 +50,9 @@ router.put("/movie/:movieId", (req, res) => {
     console.log(listId);
     let markMovie = playlist.checkOffMovie(listId, movieId);
     markMovie.then((result) => {
-        res.sendStatus(200);
+        res.json({ success: true });
+    }).catch((error) => {
+        res.json({ success: false, error: error });
     });
 });
 
@@ -103,14 +106,16 @@ router.delete("/movie/:movieId", (req, res) => {
     let movieId = req.params.movieId;
     let removeMovie = playlist.removeMovieByMovieId(listId, movieId);
     removeMovie.then((result) => {
-        res.sendStatus(200);
+        res.json({ success: true });
+    }).catch((error) => {
+        res.json({ succes: false, error: error });
     });
 });
 
-router.post("/:movieId", (req, res) => {
+router.post("/:userId/:movieId", (req, res) => {
     let movieId = req.params.movieId;
-    let playlistId = req.params.playlistId;
     let movie = api.getMovieDetails(movieId);
+    let userId = req.params.userId;
     movie.then((details) => {
         let title = details.title;
         let overview = details.overview;
@@ -118,10 +123,11 @@ router.post("/:movieId", (req, res) => {
         playlistInfo.then((playlistId) => {
             let newList = playlist.addMovieToPlaylist(playlistId._id, movieId, title, overview);
             newList.then((addedMovie) => {
+                res.json({ success: true });
             });
         });
     }).catch((error) => {
-        console.error(error);
+        res.json({ success: false, error: error });
     });
 });
 
