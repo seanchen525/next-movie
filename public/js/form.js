@@ -1,7 +1,9 @@
-(function ($, location) {
+(function ($, localStorage, location) {
     var kvpForm = $("#server-form");
     var formAlert = $("#form-alert");
     var yearInput = $("#releaseYear");
+
+    
 
     // kvpForm.submit(function (event) {
     //     console.log("in submit");
@@ -22,4 +24,4 @@
     //     return;
     // });
 
-})(jQuery, window.location);
+})(jQuery, window.localStorage, window.location);

@@ -10,9 +10,11 @@ const form = require("./form");
 const users = require("./users");
 const playlist = require("./playlist");
 const movie = require("./movie");
+const api = require("./api");
 
 module.exports = {
     form: form,
+    api: api,
     movie: movie,
     playlist: playlist,
     users: users

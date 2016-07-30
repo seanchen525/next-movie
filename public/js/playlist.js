@@ -12,7 +12,6 @@
     });
 
     checkOffMovie.click(function () {
-        console.log("movie checkd off!");
         let movieId = this.id;
         $.ajax({
             url: '/playlist/movie/' + movieId,
@@ -21,7 +20,6 @@
                 window.location.reload(true);
             }
         });
-        //update movie status to watched, reload page
 
     });
 

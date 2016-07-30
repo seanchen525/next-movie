@@ -1,21 +1,14 @@
-/*Program Title: routes/index.js
-Author: Kathy Chowaniec
-Course: CS546-WS
-Date: 07/20/2016
-Description:
-This module directs the routes to the form file
-*/
-
-const formRoutes = require("./form");
+const profileRoutes = require("./profile");
 const playlistRoutes = require("./playlist");
 
 const constructorMethod = (app) => {
-    app.use("/", formRoutes);
+    app.use("/profile", profileRoutes);
+    app.use("/playlist", playlistRoutes);
 
     //for any other routes, redirect to static client page
     app.use("*", (req, res) => {
-        res.redirect("/client");
-    })
+       // res.redirect("/client");
+    });
 };
 
 module.exports = constructorMethod;
