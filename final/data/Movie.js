@@ -219,6 +219,52 @@ var exportedMethods = {
                 });
             });
         });
+    },
+    
+    getMovieDetailsById(movie){
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/movie/" + movie.id + pathTail + "&append_to_response=keywords,credits,release_dates", (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data);
+                    var keywordVal = [];
+                    for (var i = 0; i < rs.keywords.keywords.length; i++){
+                        keywordVal.push(rs.keywords.keywords[i].name);
+                    }
+                    movie.keywords = keywordVal;
+                    
+                    var genreVal = [];
+                    for (var i = 0; i < rs.genres.length; i++){
+                        genreVal.push(rs.genres[i].name);
+                    }
+                    movie.genre = genreVal;
+                    movie.runtime = rs.runtime;
+                    
+                     var castVal = [];
+                    for (var i = 0; i < rs.credits.cast.length; i++){
+                        castVal.push(rs.credits.cast[i].name);
+                    }
+                    movie.cast = castVal;
+                    
+                    for (var i = 0; i < rs.credits.crew.length; i++){
+                        if (rs.credits.crew[i].job == "Director"){
+                            movie.director = rs.credits.crew[i].name;
+                        }
+                    }
+                    
+                    for (var i = 0; i < rs.release_dates.results.length; i++){
+                        if (rs.release_dates.results[i].iso_3166_1 == "US"){
+                            movie.rated = rs.release_dates.results[i].release_dates[0].certification;
+                        }
+                    }
+                    fulfill(movie);
+                });
+            }); 
+        });
     }
 }
 
