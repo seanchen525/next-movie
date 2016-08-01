@@ -25,7 +25,6 @@ new Promise((fulfill, reject) => {
     for (var i = 0; i < movieList.length; i++){
         let movie_id = movieList[i].id;
         var newMovie = {};
-        newMovie._id = uuid.v4();
         newMovie.id = movie_id;
         newMovie.title = movieList[i].title;
         newMovie.description = movieList[i].overview;
@@ -35,28 +34,14 @@ new Promise((fulfill, reject) => {
         listOfMovie.push(newMovie);
     }
 }).then(() => {
-    dbConnection().then((db) => {
-        return db.collection("Movie").drop().then(function(){
-            return db;
-        }, function(){
-            return db;
-        }).then((db) => {
-            return db.createCollection("Movie");
-        }).then((movieCollection) => {
-            return movieCollection.insertMany(listOfMovie).then(function() {
-                return movieCollection.find().toArray();
-            });
-        }).then((movies) => {
-            for (var i = 0; i < listOfMovie.length; i++){
-                if (i == 10){
-                    pathTail = "";//change api key 
-                }
-                loopMovies(i);
-            }
-        });
-    }, (error) => {
-        console.error(error);
-    });
+    for (var i = 0; i < 9; i++){//listOfMovie.length
+        
+        if (i == 10){
+            pathTail = "";//change api key 
+        }
+        
+        loopMovies(i);
+    }
 });
 
 function loopMovies(index){
@@ -123,8 +108,27 @@ function loopMovies(index){
             }); 
         });
     }).then(() => {
-        console.log(listOfMovie[index]._id);
-        movie.updateMovieById(listOfMovie[index]._id, listOfMovie[index])
+        return new Promise((fulfill, reject) => {
+            https.get(restHost + "/movie/" + listOfMovie[index].id + "/release_dates" + pathTail, (res) => {
+                res.setEncoding('utf8');
+                var _data = '';
+                res.on('data', (d) => {
+                    _data += d;
+                });
+                res.on('end', () => {
+                    var rs = JSON.parse(_data).results;
+                    for (var i = 0; i < rs.length; i++){
+                        if (rs[i].iso_3166_1 == "US"){
+                            listOfMovie[index].rated = rs[i].release_dates[0].certification;
+                        }
+                    }
+                    fulfill(rs);
+                });
+            }); 
+        });
+    }).then(() => {
+        delete listOfMovie[index].id;
+        movie.addMovie(listOfMovie[index]);
     });
 }
 
