@@ -164,6 +164,41 @@ var exportedMethods = {
     },
 
 
+    addMovieReviewToPlaylist(playlistId, movieId, review) {
+        return Playlist().then((playlistCollection) => {
+            let reviewId = uuid.v4();
+            let obj = {
+                _id: reviewId,
+                rating: review.rating,
+                date: review.date,
+                comment: review.review
+            };
+            return playlistCollection.update({ _id: playlistId, "playlistMovies._id": movieId }, { $set: { "playlistMovies.$.review": obj } }).then(function () {
+                return reviewId;
+            }).then((id) => {
+                return this.getMovieReview(playlistId, movieId, id);
+            }).catch((error) => {
+                console.log("error");
+                return { error: error };
+            });
+        });
+
+    },
+
+    getMovieReview(playlistId, movieId, reviewId) {
+        return Playlist().then((playlistCollection) => {
+            return playlistCollection.findOne({ _id: playlistId, "playlistMovies._id": movieId }, { "playlistMovies.review": 1 }).then(function (result) {
+                if (!result) throw "Review with id " + reviewId + " doesn't exist!";
+                return result.playlistMovies[0].review;
+            }).catch((error) => {
+                console.log("error");
+                console.log(error);
+                return { error: error };
+
+            });
+        });
+    }
+
 }
 
 module.exports = exportedMethods;

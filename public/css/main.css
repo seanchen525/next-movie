@@ -51,7 +51,7 @@ img {
     font-size: 15px;
 }
 
-.review{
+.review, .remove-review{
     width: 10em;
     display: inline-block;
     background-color: #3498DB;

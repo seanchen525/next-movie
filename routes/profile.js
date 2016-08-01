@@ -27,7 +27,7 @@ router.post("/:userId", (req, res) => {
     let parseActors = [];
     let actorIds = [];
     let keywordIds = [];
-    let directorId;
+    var directorId;
     let parseWords = [];
     let parseGenre = [];
 
@@ -41,10 +41,13 @@ router.post("/:userId", (req, res) => {
     }
 
     if (director) {
-        directorId = api.getPersonIdByName(director);
-        directorId.then((id) => {
-            directorId = id;
-        });
+        //let id = api.getPersonIdByName(director);
+        // id.then((director) => {
+        //     directorId = director.results[0].id;
+        // });
+        form.getDirectorId(director);
+        directorId = form.getDId();
+        console.log(directorId);
     }
     if (keywords) {
         parseWords = keywords.split(',');
@@ -84,14 +87,17 @@ router.post("/:userId", (req, res) => {
     //SEARCH BY CRITERIA
     else {
         let criteria = api.createSearchString(actorIds, parseGenre, directorId, rating, evaluation, year, keywordIds);
+        console.log(criteria);
         let result = api.searchByCriteria(criteria);
         result.then((movies) => {
-            if (directorId) {
-                //filter results for director
-
-            }
+            // if (directorId) {
+            //     //filter results for director
+            //     let movielist = form.filterForDirector(directorId, movies.results, movies.total_results);
+            // }
+            // else {
             let movielist = form.formatReleaseDate(movies.results);
             let total = movies.total_results;
+            //    }
             res.render("results/movielist", { userId: userId, movies: movielist, total: total, partial: "results-script" });
         }).catch((e) => {
             res.render("profile/preferences", {

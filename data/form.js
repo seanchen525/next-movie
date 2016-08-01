@@ -1,16 +1,41 @@
 let ids = [];
+const api = require("./api");
+var directorId;
 
 let exportedMethods = {
 
-formatReleaseDate(movielist) {
-            for (var i = 0; i < movielist.length; i++) {
-                if (!movielist[i].release_date == '') {
-                    let parsedDate = Date.parse(movielist[i].release_date);
-                    let newDate = new Date(parsedDate);
-                    movielist[i].release_date = newDate.toDateString();
-                }
+    formatReleaseDate(movielist) {
+        for (var i = 0; i < movielist.length; i++) {
+            if (!movielist[i].release_date == '') {
+                let parsedDate = Date.parse(movielist[i].release_date);
+                let newDate = new Date(parsedDate);
+                movielist[i].release_date = newDate.toDateString();
             }
-            return movielist;
+        }
+        return movielist;
+    },
+
+    filterForDirector(directorId, movies, total) {
+
+    },
+
+    getDirectorId(director) {
+        let getName = api.getPersonIdByName(director);
+        getName.then((directorId) => {
+            let id = directorId.results[0].id;
+            /// callback(id);
+            exportedMethods.storeDId(id);
+            //directorId = id;
+        });
+    },
+    storeDId(id) {
+        console.log("setting id to " + id);
+        directorId = id;
+    },
+    getDId() {
+        console.log("inside get id");
+        console.log(directorId);
+        return directorId;
     },
     getKeywordIds(keywords) {
         let ids = [];

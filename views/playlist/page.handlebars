@@ -15,14 +15,27 @@
             <label for="check-off">Viewed?</label><br>
             <label for="title" class="movie_title">{{this.title}}</label>
             <label for="overview">{{this.overview}}</label>
-          <div class="playlist_buttons">
-        <button type="button" id={{this._id}} class="delete" class="btn btn-default"><span class="glyphicon glyphicon-remove-sign"></span>
-        Remove
+            {{#if this.review}}
+            <label for="review">Your Review:</label>
+            {{this.review.rating}}/5, "{{this.review.comment}}"
+            <div class="playlist_buttons">
+               <button type="button" id={{this.review._id}} class="remove-review" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+         Remove Review
+            </button>
+            {{else}}
             </button>
         <button type="button" id={{this._id}} class="review" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
         Add Review
             </button>
+            {{/if}}
+        <button type="button" id={{this._id}} class="delete" class="btn btn-default"><span class="glyphicon glyphicon-remove-sign"></span>
+        Remove
             </div>
+            <form class="new-item-form" id={{this._id}}>
+            <label>Rating <input class="new-rating" id={{this._id}} type="number" step="0.1" min="1" max="5"/>/5</label><br>
+            <label>Review <textarea class="new-review" id = {{this._id}}></textarea></label>
+            <input type="submit" class="post-review" id = {{this._id}} value="Submit Review" />
+            </form>
                 </li>
             </ul>
             {{/each}}

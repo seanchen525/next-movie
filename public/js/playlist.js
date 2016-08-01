@@ -7,8 +7,49 @@
     var checkOffMovie = $(".check-off");
     var viewedMovies = $(".check");
 
-    addReview.click(function () {
+    var myNewTaskForm = $(".new-item-form");
 
+    myNewTaskForm.hide();
+
+    myNewTaskForm.submit(function (event) {
+        event.preventDefault();
+        let movieId = this.id;
+        let rating = $("#" + movieId + ".new-rating").val();
+        let review = $("#" + movieId + ".new-review").val();
+
+        if (rating && review) {
+            var date = new Date();
+            console.log(date);
+            //   var month = date.getMonth() + 1;
+            //  var formatDate = month + "/" + date.getDay() + "/" + date.getYear();
+            var requestConfig = {
+                method: "POST",
+                url: "/playlist/reviews/" + movieId,
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    rating: rating,
+                    review: review,
+                    date: date
+                })
+            };
+
+            $.ajax(requestConfig).then(function (response) {
+                if (response.success == true) {
+                    console.log(response.result);
+                  //  var removeReview = $(".remove-review");
+                   // removeReview.show();
+                    window.location.reload(true);
+                }
+            });
+        }
+
+    });
+
+    addReview.click(function () {
+        //display review text box, change add review text to 'post', save to db and update page
+        let movieId = this.id;
+        let form = $("#" + movieId + ".new-item-form");
+        form.toggle();
     });
 
     checkOffMovie.click(function () {

@@ -13,6 +13,7 @@ router.get("/:playlistId", (req, res) => {
     listId = playlistId;
     let info = playlist.getPlaylistById(playlistId);
     info.then((result) => {
+        //  console.log(result);
         let viewed = [];
         let unviewed = [];
         for (var i = 0; i < result.playlistMovies.length; i++) {
@@ -47,13 +48,25 @@ router.delete("/:playlistId", (req, res) => {
 
 router.put("/movie/:movieId", (req, res) => {
     let movieId = req.params.movieId;
-    console.log(listId);
     let markMovie = playlist.checkOffMovie(listId, movieId);
     markMovie.then((result) => {
         res.json({ success: true });
     }).catch((error) => {
         res.json({ success: false, error: error });
     });
+});
+
+router.post("/reviews/:movieId", (req, res) => {
+    let movieId = req.params.movieId;
+    let reviewData = req.body;
+    let postReview = playlist.addMovieReviewToPlaylist(listId, movieId, reviewData);
+    postReview.then((result) => {
+        //console.log(result);
+        res.json({ success: true, result: result });
+    }).catch((error) => {
+        res.json({ success: false, error: error });
+    });
+
 });
 
 router.get("/reviews/:movieId", (req, res) => {
