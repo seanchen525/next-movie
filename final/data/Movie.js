@@ -231,6 +231,13 @@ var exportedMethods = {
                 });
                 res.on('end', () => {
                     var rs = JSON.parse(_data);
+                    
+                    movie.title = rs.title;
+                    movie.description = rs.overview;
+                    movie.releaseDate = rs.release_date;
+                    movie.averageRating = rs.vote_average;
+                    movie.poster_path = rs.poster_path;
+                    
                     var keywordVal = [];
                     for (var i = 0; i < rs.keywords.keywords.length; i++){
                         keywordVal.push(rs.keywords.keywords[i].name);
@@ -261,6 +268,7 @@ var exportedMethods = {
                             movie.rated = rs.release_dates.results[i].release_dates[0].certification;
                         }
                     }
+                    
                     fulfill(movie);
                 });
             }); 

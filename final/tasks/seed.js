@@ -21,14 +21,8 @@ new Promise((fulfill, reject) => {
     });
 }).then((movieList) => {
     for (var i = 0; i < movieList.length; i++){
-        let movie_id = movieList[i].id;
         var newMovie = {};
-        newMovie.id = movie_id;
-        newMovie.title = movieList[i].title;
-        newMovie.description = movieList[i].overview;
-        newMovie.releaseDate = movieList[i].release_date;
-        newMovie.averageRating = movieList[i].vote_average;
-        newMovie.keywords = [];
+        newMovie.id = movieList[i].id;
         listOfMovie.push(newMovie);
     }
 }).then(() => {

@@ -1,0 +1,22 @@
+<div class="movie_detail_box">
+    <div class="poster_box"><img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2{{movie.poster_path}}"></div>
+    <ul>
+        <li>Title: {{movie.title}}</li>
+        <li>Director: {{movie.director}}</li>
+        <li>Release Date: {{movie.releaseDate}}</li>
+        <li>Run Time: {{movie.runtime}}min</li>
+        <li>Rate: {{movie.averageRating}}</li>
+    </ul>
+    <div class="other_info">
+        <div>Description: {{movie.description}}</div>
+        
+        {{#if movie.cast.length}}
+            <h2>Cast:</h2>
+            <ul>
+                {{#each movie.cast}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    </div>
+</div>
