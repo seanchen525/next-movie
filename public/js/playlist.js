@@ -6,10 +6,16 @@
     var addReview = $(".review");
     var checkOffMovie = $(".check-off");
     var viewedMovies = $(".check");
-
     var myNewTaskForm = $(".new-item-form");
+    var updateTitle = $(".update-title");
+    var newTitleBox = $(".update-title-box");
+    var updateListTitle = $("#update-title");
+    var saveTitle = $(".save-title");
+    var playlistTitle = $("#playlist-title");
+    var currentTitle = playlistTitle.text();
 
     myNewTaskForm.hide();
+    updateListTitle.hide();
 
     myNewTaskForm.submit(function (event) {
         event.preventDefault();
@@ -36,12 +42,60 @@
             $.ajax(requestConfig).then(function (response) {
                 if (response.success == true) {
                     console.log(response.result);
-                  //  var removeReview = $(".remove-review");
-                   // removeReview.show();
+                    //  var removeReview = $(".remove-review");
+                    // removeReview.show();
                     window.location.reload(true);
                 }
             });
         }
+
+    });
+
+    updateTitle.click(function () {
+        let playlistId = this.id;
+        playlistTitle.hide();
+        updateTitle.hide();
+        updateListTitle.show();
+        newTitleBox.val(currentTitle);
+    });
+
+    saveTitle.click(function () {
+        let playlistId = this.id;
+        let newTitle = newTitleBox.val();
+        var requestConfig = {
+            method: "PUT",
+            url: "/playlist/title/" + playlistId,
+            contentType: 'application/json',
+            data: JSON.stringify({
+                title: newTitle
+            })
+        };
+
+        $.ajax(requestConfig).then(function (response) {
+            if (response.success == true) {
+                updateListTitle.hide();
+                updateTitle.show();
+                playlistTitle.html(newTitle);
+                playlistTitle.show();
+            }
+        });
+
+    });
+
+    //remove existing review
+    $(".remove-review").click(function () {
+        let reviewId = this.id;
+        var removeReview = {
+            method: "DELETE",
+            url: "/playlist/reviews/" + reviewId,
+            contentType: 'application/json',
+        };
+
+        $.ajax(removeReview).then(function (response) {
+            if (response.success == true) {
+                window.location.reload(true);
+            }
+        });
 
     });
 
@@ -78,6 +132,7 @@
 
             $.ajax(clearList).then(function (response) {
                 if (response.success == true) {
+                    // myNewTaskForm.load("../playlist/page");
                     window.location.reload(true);
                 }
             });
@@ -94,6 +149,8 @@
 
         $.ajax(removeMovie).then(function (response) {
             if (response.success == true) {
+                // var movie = $("li #" + movieId)
+                //movie.hide();
                 window.location.reload(true);
             }
         });

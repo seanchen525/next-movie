@@ -62,8 +62,22 @@ img {
     border-radius: 10px;
 }
 
+#title-header{
+    display: inline-block;
+}
+
+.update-title, .save-title{
+    width: 10em;
+    background-color: #3498DB;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
 #search{
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50; 
     border: none;
     color: white;
     padding: 15px 32px;

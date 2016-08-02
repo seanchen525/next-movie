@@ -69,6 +69,29 @@ router.post("/reviews/:movieId", (req, res) => {
 
 });
 
+router.delete("/reviews/:reviewId", (req, res) => {
+    //method to clear out playlist
+    let reviewId = req.params.reviewId;
+    let removeReview = playlist.removeReviewFromPlaylist(listId, reviewId);
+    removeReview.then((result) => {
+        res.json({ success: true });
+    }).catch((error) => {
+        res.json({ success: false, error: error });
+    });
+});
+
+router.put("/title/:playlistId", (req, res) => {
+    //method to clear out playlist
+    let playlistId = req.params.playlistId;
+    let newTitle = req.body.title;
+    let setTitle = playlist.setNewTitle(playlistId, newTitle);
+    setTitle.then((result) => {
+        res.json({ success: true });
+    }).catch((error) => {
+        res.json({ success: false, error: error });
+    });
+});
+
 router.get("/reviews/:movieId", (req, res) => {
     let id = req.params.movieId;
     let reviews = api.getMovieReviews(id);

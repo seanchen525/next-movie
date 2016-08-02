@@ -3,7 +3,10 @@
     var formAlert = $("#form-alert");
     var yearInput = $("#releaseYear");
 
-    
+    $("#clear-form").click(function () {
+
+    });
+
 
     // kvpForm.submit(function (event) {
     //     console.log("in submit");

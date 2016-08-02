@@ -1,5 +1,16 @@
 <div class="playlist">
-    <h1>{{ playlist.title }}</h1>
+    <div id="title-header">
+    <h1 id="playlist-title">{{ playlist.title }}</h1>
+       <button type="button" id={{playlist._id}} class="update-title" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+         Change Playlist Name
+        </button> 
+    </div>
+    <div id="update-title">
+    <input type="text" id={{playlist._id}} class="update-title-box" />
+  <button type="button" id={{playlist._id}} class="save-title" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+         Save Name
+        </button> 
+    </div>
     {{#if movies.length}}
         <div class="clear-list">
         <button type="button" id={{playlist._id}} class="clear" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span>
@@ -12,7 +23,7 @@
             <ul class="not_viewed">
                 <li>
             <input type="checkbox" id= {{this._id}} class="check-off">
-            <label for="check-off">Viewed?</label><br>
+            <label for="check-off">Check-Off?</label><br>
             <label for="title" class="movie_title">{{this.title}}</label>
             <label for="overview">{{this.overview}}</label>
             {{#if this.review}}
