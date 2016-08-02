@@ -6,7 +6,7 @@
         </button> 
     </div>
     <div id="update-title">
-    <input type="text" id={{playlist._id}} class="update-title-box" />
+    <input type="text" id={{playlist._id}} class="update-title-box" required/>
   <button type="button" id={{playlist._id}} class="save-title" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
          Save Name
         </button> 
@@ -43,8 +43,8 @@
         Remove
             </div>
             <form class="new-item-form" id={{this._id}}>
-            <label>Rating <input class="new-rating" id={{this._id}} type="number" step="0.1" min="1" max="5"/>/5</label><br>
-            <label>Review <textarea class="new-review" id = {{this._id}}></textarea></label>
+            <label>Rating <input required class="new-rating" id={{this._id}} type="number" step="0.1" min="1" max="5"/>/5</label><br>
+            <label>Review <textarea required class="new-review" id = {{this._id}}></textarea></label>
             <input type="submit" class="post-review" id = {{this._id}} value="Submit Review" />
             </form>
                 </li>
@@ -56,10 +56,15 @@
             {{#each viewed}}
             <ul class="viewed">
                 <li>
-            <label for="title">{{this.title}}</label>
-            {{#if this.review.length}}
+            <label for="title">{{this.title}}</label><br>
+            {{#if this.review}}
             <label for="review">Your Review:</label>
-            <input type="text" id={{this._id}}>
+            {{this.review.rating}}/5, "{{this.review.comment}}"
+            <div class="playlist_buttons">
+               <button type="button" id={{this.review._id}} class="remove-review" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+         Remove Review
+            </button>
+            </div>
             {{/if}}
             </li>
             </ul>

@@ -59,12 +59,12 @@ router.post("/:userId", (req, res) => {
     }
 
     if (genres) {
-        if (typeof genres === "object") {
+        if (typeof genres === "object") { //multiple genres selected
             for (var i = 0; i < genres.length; i++) {
                 parseGenre.push(parseInt(genres[i]));
             }
         }
-        else {
+        else { //just one genre selected
             parseGenre.push(parseInt(genres));
         }
     }

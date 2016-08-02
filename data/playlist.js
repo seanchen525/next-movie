@@ -14,7 +14,6 @@ var exportedMethods = {
         return Playlist().then((playlistCollection) => {
             return playlistCollection.findOne({ _id: id }).then((playlistObj) => {
                 if (!playlistObj) throw "Playlist not found";
-                console.log(playlistObj);
                 return playlistObj;
             }).catch((error) => {
                 return error;
@@ -36,7 +35,7 @@ var exportedMethods = {
     },
     getPlaylistByUserId(userId) {
         return Playlist().then((playlistCollection) => {
-            return playlistCollection.findOne({ "user._id": userId }, { _id: 1 }).then((playlist) => {
+            return playlistCollection.findOne({ "user._id": userId }).then((playlist) => {
                 if (!playlist) throw "User has no playlist";
                 return playlist;
             }).catch((error) => {
@@ -200,9 +199,9 @@ var exportedMethods = {
 
     removeReviewFromPlaylist(playlistId, reviewId) {
         return Playlist().then((playlistCollection) => {
-            return playlistCollection.updateOne({ _id: playlistId }, {
-                //pull comment that matches the given id
-                $unset: { "playlistMovies.0.review": "" }
+            return playlistCollection.updateOne({ _id: playlistId, "playlistMovies.review._id": reviewId }, {
+                //unset review object
+                $unset: { "playlistMovies.$.review": "" }
             }).then((result) => {
                 if (result.modifiedCount == 0) throw "Could not remove review with id of " + reviewId;
             }).catch((error) => {

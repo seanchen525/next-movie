@@ -148,20 +148,32 @@ router.delete("/movie/:movieId", (req, res) => {
     });
 });
 
+//add movie to playlist
 router.post("/:userId/:movieId", (req, res) => {
     let movieId = req.params.movieId;
-    let movie = api.getMovieDetails(movieId);
     let userId = req.params.userId;
-    movie.then((details) => {
-        let title = details.title;
-        let overview = details.overview;
-        let playlistInfo = playlist.getPlaylistByUserId(userId);
-        playlistInfo.then((playlistId) => {
-            let newList = playlist.addMovieToPlaylist(playlistId._id, movieId, title, overview);
-            newList.then((addedMovie) => {
-                res.json({ success: true });
+    //check limit of playlist
+    let playlistInfo = playlist.getPlaylistByUserId(userId);
+    playlistInfo.then((userPlaylist) => {
+        console.log(userPlaylist);
+        if (userPlaylist.playlistMovies.length == 10) {
+            res.json({ success: false, error: "You have reached the maximum of 10 movies in your playlist" });
+        }
+        else {
+            let movie = api.getMovieDetails(movieId);
+            let userId = req.params.userId;
+            movie.then((details) => {
+                console.log(details);
+                let title = details.title;
+                let overview = details.overview;
+                let newList = playlist.addMovieToPlaylist(userPlaylist._id, movieId, title, overview);
+                newList.then((addedMovie) => {
+                    res.json({ success: true });
+                });
+            }).catch((error) => {
+                res.json({ success: false, error: error });
             });
-        });
+        }
     }).catch((error) => {
         res.json({ success: false, error: error });
     });

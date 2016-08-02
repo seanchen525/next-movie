@@ -18,6 +18,9 @@
             if (response.success == true) {
                 alert("Movie has been added to your playlist")
             }
+            else if (response.error) {
+                alert(response.error);
+            }
         });
     });
 

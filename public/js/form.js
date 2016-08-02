@@ -3,7 +3,16 @@
     var formAlert = $("#form-alert");
     var yearInput = $("#releaseYear");
 
+    //clear search criteria inputs
     $("#clear-form").click(function () {
+        //clear all input values
+        $("#actors").val('');
+        $("#genre").val('');
+        $("#director").val('');
+        $("#rating").val('');
+        $("#releaseYear").val('');
+        $("#keywords").val('');
+        $("#title").val('');
 
     });
 
