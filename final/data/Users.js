@@ -20,6 +20,17 @@ var exportedMethods = {
 			});
         });
     },
+    
+    getUserBySessionId(id) {
+        return Users().then((userCollection) => {
+            return userCollection.findOne({sessionId:id}).then((userObj) => {
+                if (!userObj) throw "Users not found";
+                return userObj;
+            }).catch((error)=>{
+				return error;
+			});
+        });
+    },
 	
 	addUsers(obj) {
         return Users().then((userCollection) => {
@@ -55,7 +66,20 @@ var exportedMethods = {
 		}).catch((error)=>{
 			return error;
 		})
-	}
+	},
+    
+    verifyUser(obj){
+        return Users().then((userCollection) => {
+            return userCollection.findOne({$and: [{"profile.username": obj.username}, {hashedPassword: obj.password}]}).then((userObj) => {
+                if (!userObj) throw "Users not found";
+                
+                userObj.sessionId = uuid.v4();
+                return this.updateUserById(userObj._id, userObj);;
+            }).catch((error)=>{
+				return error;
+			});
+        });
+    }
 
 }
 

@@ -19,7 +19,6 @@
   router.get('/movies/:id', function (req, res) {
   	 movies.getMovieById(req.params.id).then((MovieObj)=>{
 		if (MovieObj) {
-			//res.status(200).send(MovieObj);
 			res.render("movie/detail", {
 				movie: MovieObj,
 				partial: "jquery-detail-scripts"
