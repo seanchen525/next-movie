@@ -36,3 +36,26 @@ ul, li{
 #error-container .alert{
     margin-bottom: 0;
 }
+
+.home_title{
+    text-align: center;
+    color: #286090;
+}
+
+button.close{
+    margin-left: 8px;
+}
+
+.tab-content{
+    padding: 15px 0 0;
+}
+
+#preferences .nav-pills{
+    border-bottom: 1px solid #286090;
+    margin-bottom: 15px;
+}
+
+#preferences .glyphicon-plus{
+    margin-left: 8px;
+    cursor: pointer;
+}
