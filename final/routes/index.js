@@ -14,6 +14,11 @@ module.exports = function(app) {
   app.use("/",routerMovie);
   app.use("/",routerPlaylist);
   app.use("*", (req, res) => {
-        res.sendStatus(404);
+        //res.sendStatus(404);
+        if (req.cookies.next_movie == undefined){
+            res.redirect("/login");
+        } else {
+            res.redirect("/user");
+        }
   })
 };
