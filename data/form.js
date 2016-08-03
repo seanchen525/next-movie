@@ -20,13 +20,18 @@ let exportedMethods = {
     },
 
     getDirectorId(director) {
-        let getName = api.getPersonIdByName(director);
-        getName.then((directorId) => {
-            let id = directorId.results[0].id;
-            /// callback(id);
-            exportedMethods.storeDId(id);
-            //directorId = id;
+        api.getPersonIdByName(director, function (result) {
+            let id = result.results[0].id;
+            console.log(id);
+            return id;
         });
+        // console.log(getName);
+        //   getName.then((directorId) => {
+        //     let id = directorId.results[0].id;
+        //     /// callback(id);
+        //     exportedMethods.storeDId(id);
+        //     //directorId = id;
+        // });
     },
     storeDId(id) {
         console.log("setting id to " + id);

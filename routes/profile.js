@@ -45,9 +45,10 @@ router.post("/:userId", (req, res) => {
         // id.then((director) => {
         //     directorId = director.results[0].id;
         // });
-        form.getDirectorId(director);
-        directorId = form.getDId();
-        console.log(directorId);
+        directorId = form.getDirectorId(director);
+        // console.log(id);
+        // directorId = form.getDId();
+        //  console.log(directorId);
     }
     if (keywords) {
         parseWords = keywords.split(',');
@@ -86,27 +87,26 @@ router.post("/:userId", (req, res) => {
 
     //SEARCH BY CRITERIA
     else {
-        let criteria = api.createSearchString(actorIds, parseGenre, directorId, rating, evaluation, year, keywordIds);
-        console.log(criteria);
-        let result = api.searchByCriteria(criteria);
-        result.then((movies) => {
-            // if (directorId) {
-            //     //filter results for director
-            //     let movielist = form.filterForDirector(directorId, movies.results, movies.total_results);
-            // }
-            // else {
-            let movielist = form.formatReleaseDate(movies.results);
-            let total = movies.total_results;
-            //    }
-            res.render("results/movielist", { userId: userId, movies: movielist, total: total, partial: "results-script" });
-        }).catch((e) => {
-            res.render("profile/preferences", {
-                title: title, actors: actors, genres: genre, director: director,
-                evaluation: evalution, rating: rating, releaseYear: year, keywords: keywords, error: e, partial: "form-validation"
+        if (directorId) {
+            let criteria = api.createSearchString(actorIds, parseGenre, directorId, rating, evaluation, year, keywords);
+            console.log(criteria);
+        }
+        else {
+            let criteria = api.createSearchString(actorIds, parseGenre, directorId, rating, evaluation, year, keywordIds);
+            console.log(criteria);
+            let result = api.searchByCriteria(criteria);
+            result.then((movies) => {
+                let movielist = form.formatReleaseDate(movies.results);
+                let total = movies.total_results;
+                res.render("results/movielist", { userId: userId, movies: movielist, total: total, partial: "results-script" });
+            }).catch((e) => {
+                res.render("profile/preferences", {
+                    title: title, actors: actors, genres: genre, director: director,
+                    evaluation: evalution, rating: rating, releaseYear: year, keywords: keywords, error: e, partial: "form-validation"
+                });
             });
-        });
+        }
     }
-
 });
 
 module.exports = router;

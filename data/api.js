@@ -73,8 +73,7 @@ let exportedMethods = {
         });
     },
 
-    getPersonIdByName(personName) {
-        return new Promise((fulfill, reject) => {
+    getPersonIdByName(personName, callback) {
             https.get(restHost + "/search/person" + pathTail + "&query=" + personName + "&include_adult=false", function (response) {
                 response.setEncoding('utf8');
                 var body = '';
@@ -82,14 +81,13 @@ let exportedMethods = {
                     body += d;
                 });
                 response.on('error', (e) => {
-                    reject(e);
+                    callback(e);
                 });
                 response.on('end', function () {
                     var parsed = JSON.parse(body);
-                    fulfill(parsed);
+                    callback(parsed);
                 });
             });
-        });
     },
     getKeywordIdByName(keyword) {
         return new Promise((fulfill, reject) => {
