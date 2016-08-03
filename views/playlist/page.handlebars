@@ -1,0 +1,76 @@
+<div class="playlist">
+    <div id="title-header">
+    <h1 id="playlist-title">{{ playlist.title }}</h1>
+       <button type="button" id={{playlist._id}} class="update-title" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+         Change Playlist Name
+        </button> 
+    </div>
+    <div id="update-title">
+    <input type="text" id={{playlist._id}} class="update-title-box" required/>
+  <button type="button" id={{playlist._id}} class="save-title" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+         Save Name
+        </button> 
+    </div>
+    {{#if movies.length}}
+        <div class="clear-list">
+        <button type="button" id={{playlist._id}} class="clear" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span>
+        Clear Playlist
+            </button>
+            </div>   
+        {{#if unviewed.length}}
+            <h3>Movies to watch:</h3>
+            {{#each unviewed}}
+            <ul class="not_viewed">
+                <li>
+            <input type="checkbox" id= {{this._id}} class="check-off">
+            <label for="check-off">Check-Off?</label><br>
+            <label for="title" class="movie_title">{{this.title}}</label>
+            <label for="overview">{{this.overview}}</label>
+            {{#if this.review}}
+            <label for="review">Your Review:</label>
+            {{this.review.rating}}/5, "{{this.review.comment}}"
+            <div class="playlist_buttons">
+               <button type="button" id={{this.review._id}} class="remove-review" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+         Remove Review
+            </button>
+            {{else}}
+            </button>
+        <button type="button" id={{this._id}} class="review" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+        Add Review
+            </button>
+            {{/if}}
+        <button type="button" id={{this._id}} class="delete" class="btn btn-default"><span class="glyphicon glyphicon-remove-sign"></span>
+        Remove
+            </div>
+            <form class="new-item-form" id={{this._id}}>
+            <label>Rating <input required class="new-rating" id={{this._id}} type="number" step="0.1" min="1" max="5"/>/5</label><br>
+            <label>Review <textarea required class="new-review" id = {{this._id}}></textarea></label>
+            <input type="submit" class="post-review" id = {{this._id}} value="Submit Review" />
+            </form>
+                </li>
+            </ul>
+            {{/each}}
+        {{/if}}
+           {{#if viewed.length}}
+            <h3>Movies viewed:</h3>
+            {{#each viewed}}
+            <ul class="viewed">
+                <li>
+            <label for="title">{{this.title}}</label><br>
+            {{#if this.review}}
+            <label for="review">Your Review:</label>
+            {{this.review.rating}}/5, "{{this.review.comment}}"
+            <div class="playlist_buttons">
+               <button type="button" id={{this.review._id}} class="remove-review" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span>
+         Remove Review
+            </button>
+            </div>
+            {{/if}}
+            </li>
+            </ul>
+            {{/each}}
+        {{/if}}
+    {{else}}
+    <h4>No movies are currently in your playlist</h4>
+    {{/if}}
+</div>
