@@ -1,0 +1,150 @@
+.movie_info{
+    margin-bottom: 100px;   
+    list-style-type: none;
+}
+
+img {
+    float: left;
+    height: auto; 
+    width: auto; 
+    max-width: 300px; 
+    max-height: 300px;
+}
+.add, .details, .reviews{
+    width: 10em;
+    display: block;
+    background-color: #3498DB;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+.delete{
+    width: 10em;
+    display: inline-block;
+    background-color: #C70039;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+.clear{
+    width: 10em;
+    display: block;
+    background-color: black;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+.movie_title{
+    font-size: 15px;
+}
+
+.review, .remove-review{
+    width: 10em;
+    display: inline-block;
+    background-color: #3498DB;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+#title-header{
+    display: inline-block;
+}
+
+.update-title, .save-title{
+    width: 10em;
+    background-color: #3498DB;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+#search{
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+}
+
+ul, li{
+    list-style: none;
+    padding: 0;
+}
+
+#site_nav li{
+    float: right;
+}
+
+.movie_name{
+    text-align: center;
+    margin:20px 0;
+    font-weight: bold;
+}
+
+.movie_base_info{
+    font-size: 20px;
+    margin: 8px 0;
+}
+
+.form-signin{
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-signin-heading{
+    text-align: center;
+    color: #286090;
+}
+
+.login_btn{
+    margin: 15px 0 0;
+}
+
+#error-container{
+    margin: 15px 0 0;
+}
+
+#error-container .alert{
+    margin-bottom: 0;
+}
+
+.home_title{
+    text-align: center;
+    color: #286090;
+}
+
+button.close{
+    margin-left: 8px;
+}
+
+.tab-content{
+    padding: 15px 0 0;
+}
+
+#preferences .nav-pills{
+    border-bottom: 1px solid #286090;
+    margin-bottom: 15px;
+}
+
+#preferences .glyphicon-plus{
+    margin-left: 8px;
+    cursor: pointer;
+}
