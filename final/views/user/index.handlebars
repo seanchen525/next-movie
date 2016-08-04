@@ -2,17 +2,41 @@
     <div class="col-md-8 col-md-offset-2">
         <h3 class="home_title">Welcome back, {{user.profile.name}}!</h3>
         <h5>Base Info:</h5>
-        <form class="form form-horizontal" id="user-name-form">
+        <form class="form form-horizontal" id="user-base-form">
             <div class="form-group">
                 <label for="user_name" class="col-sm-2 control-label">Name: </label>
                 <div class="col-sm-7">
                     <input type="text" class="form-control" id="user_name" value="{{user.profile.name}}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email" class="col-sm-2 control-label">Email: </label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" id="email" value="{{user.profile.email}}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">Password: </label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" id="password" placeholder="Password" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="new_password" class="col-sm-2 control-label">Reset: </label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" id="new_password" placeholder="New Password" />
                 </div>
                 <div class="col-sm-3">
                     <button class="btn btn-default" type="button">Update</button>
                 </div>
             </div>
         </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <a href="/playlist"><button type="button" class="btn btn-primary playlist_btn" autocomplete="off">My Playlist</button></a>
     </div>
 </div>
 
@@ -111,4 +135,5 @@
             </div>
         <div>
     </div>
+    
 </div>

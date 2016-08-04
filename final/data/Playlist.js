@@ -20,6 +20,17 @@ var exportedMethods = {
 			});
         });
     },
+    
+    getPlaylistByUserId(id) {
+        return Playlist().then((playlistCollection) => {
+            return playlistCollection.findOne({"user._id":id}).then((playlistObj) => {
+                if (!playlistObj) throw "Playlist not found";
+                return playlistObj;
+            }).catch((error)=>{
+				return error;
+			});
+        });
+    },
 	
 	addPlaylist(obj) {
         return Playlist().then((playlistCollection) => {

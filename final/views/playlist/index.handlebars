@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h3 class="playlist_title">PlayList</h3>
+        <form class="form form-horizontal" id="playlist-name-form">
+            <div class="form-group">
+                <label for="playlist_name" class="col-sm-2 control-label">Name: </label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" id="playlist_name" value="{{playlist.title}}" />
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-default" type="button">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        {{#if playlist.playlistMovies.length}}
+            <ul>
+                {{#each playlist.playlistMovies}}
+                    <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    </div>
+</div>

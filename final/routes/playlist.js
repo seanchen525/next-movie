@@ -2,7 +2,8 @@
  * @author warri
  */
  var express = require('express');
- var playlist=require('../data/Playlist')
+ var playlist=require('../data/Playlist');
+ var users=require('../data/Users');
  var router = express.Router();
  
  router.get('/playlists', function (req, res) {
@@ -22,6 +23,30 @@
 		}else{
 			res.sendStatus(404);
 		}
+	 });
+  }),
+  
+  router.get('/playlist', function (req, res) {
+	 if (req.cookies.next_movie == undefined || (new Date(req.cookies.next_movie.expires) < new Date(Date.now()))) {
+		 res.redirect("/login");
+		 return;
+	 }
+	 users.getUserBySessionId(req.cookies.next_movie).then((userObj) => {
+		 if (userObj != "Users not found"){
+			 playlist.getPlaylistByUserId(userObj._id).then((PlaylistObj) => {
+				 if (PlaylistObj != "Playlist not found") {
+					//res.status(200).send(PlaylistObj);
+					res.render("playlist/index", {
+						playlist: PlaylistObj,
+						partial: "jquery-playlist-index-scripts"
+					});
+				}else{
+					res.sendStatus(404);
+				}
+			 });
+		 } else {
+			 res.sendStatus(404);
+		 }
 	 });
   }),
   

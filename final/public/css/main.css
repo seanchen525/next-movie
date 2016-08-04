@@ -3,6 +3,10 @@ ul, li{
     padding: 0;
 }
 
+#site_nav li{
+    float: right;
+}
+
 .movie_name{
     text-align: center;
     margin:20px 0;
@@ -37,7 +41,7 @@ ul, li{
     margin-bottom: 0;
 }
 
-.home_title{
+.home_title, .playlist_title{
     text-align: center;
     color: #286090;
 }
