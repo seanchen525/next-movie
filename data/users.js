@@ -1,5 +1,6 @@
 mongoCollections = require("../config/mongoCollections");
 Users = mongoCollections.users;
+var playlist = require('./Playlist');
 var uuid = require('node-uuid');
 
 var exportedMethods = {
@@ -21,6 +22,19 @@ var exportedMethods = {
         });
     },
 
+
+    addUsersGeneral(obj) {
+        return Users().then((userCollection) => {
+            obj["_id"] = uuid.v4();
+            obj["profile"]["_id"] = obj["_id"];
+            return userCollection.insertOne(obj).then((userObj) => {
+                return userObj.insertedId;
+            }).then(newId => {
+                return this.getUserById(newId);
+            });
+        });
+    },
+
     getUserBySessionId(id) {
         return Users().then((userCollection) => {
             return userCollection.findOne({ sessionId: id }).then((userObj) => {
@@ -32,14 +46,52 @@ var exportedMethods = {
         });
     },
 
-    addUsers(obj) {
+    addUsers(sessionId, hashedPassword, profile, preferences) {
+        var userid = uuid.v4();
+        profile["_id"] = userid;
+        var obj = {
+            _id: userid,
+            sessionId: sessionId,
+            hashedPassword: hashedPassword,
+            profile: profile,
+            preferences: preferences
+        };
         return Users().then((userCollection) => {
-            obj["_id"] = uuid.v4();
-            obj["profile"]["_id"] = obj["_id"];
             return userCollection.insertOne(obj).then((userObj) => {
                 return userObj.insertedId;
             }).then(newId => {
                 return this.getUserById(newId);
+            });
+        });
+    },
+
+
+    //This is a cascading method which can create user and the user's playlist
+    //please note that: the title is the title for playlist and the userObj contains:sessionId,hashedPassword,profile,preferences
+    //the profile attribute doesn't contain the _id and the _id will be created by this function
+    addUsersAndPlaylist(title, userObj) {
+        var userid = uuid.v4();
+        userObj.profile["_id"] = userid;
+        var obj = {
+            _id: userid,
+            sessionId: userObj.sessionId,
+            hashedPassword: userObj.hashedPassword,
+            profile: userObj.profile,
+            preferences: userObj.preferences
+        };
+        return Users().then((userCollection) => {
+            return userCollection.insertOne(obj).then((userObj) => {
+                return obj;
+            }).then(obj => {
+                var user = {
+                    _id: obj._id,
+                    username: obj.profile.username,
+                    name: obj.profile.name,
+                    email: obj.profile.name
+                }
+                return playlist.addPlaylist(title, user).then((playlistObj) => {
+                    return playlistObj;
+                });
             });
         });
     },
@@ -82,13 +134,11 @@ var exportedMethods = {
                     email: email
                 }
             };
-            console.log(obj);
             return userCollection.insertOne(obj).then((userObj) => {
                 return userObj.insertedId;
             }).then(newId => {
                 return this.getUserById(newId);
             }).catch((error) => {
-                console.log("error");
                 return error;
             });
         });
@@ -104,6 +154,7 @@ var exportedMethods = {
             }).catch((error) => {
                 return error;
             });
+
         });
     }
 

@@ -3,8 +3,8 @@
  */
 var express = require('express');
 var movies = require('../data/movie')
-var api = require('../data/api');
 var uuid = require('node-uuid');
+var api = require('../data/api');
 var router = express.Router();
 
 router.get('/movies', function (req, res) {
@@ -40,6 +40,7 @@ router.get('/movies', function (req, res) {
 			});
 		});
 	}),
+
 
 	router.post('/movies', function (req, res) {
 		var obj = req.body;

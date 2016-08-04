@@ -150,14 +150,11 @@ router.delete("/playlist/movie/:movieId", (req, res) => {
 
 //add movie to playlist
 router.post("/playlist/:movieId", (req, res) => {
-    console.log("in add movie");
     let movieId = req.params.movieId;
     users.getUserBySessionId(req.cookies.next_movie).then((user) => {
         //check limit of playlist
-        console.log(user);
         let playlistInfo = playlist.getPlaylistByUserId(user._id);
         playlistInfo.then((userPlaylist) => {
-            console.log(userPlaylist);
             if (userPlaylist.playlistMovies.length == 10) {
                 res.json({ success: false, error: "You have reached the maximum of 10 movies in your playlist" });
             }
@@ -165,7 +162,6 @@ router.post("/playlist/:movieId", (req, res) => {
                 let movie = api.getMovieDetails(movieId);
                 let userId = user._id;
                 movie.then((details) => {
-                    console.log(details);
                     let title = details.title;
                     let overview = details.overview;
                     let newList = playlist.addMovieToPlaylist(userPlaylist._id, movieId, title, overview);
