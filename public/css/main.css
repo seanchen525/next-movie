@@ -82,9 +82,14 @@ img {
     display: inline-block;
     font-size: 20px;
 }
+
 ul, li{
     list-style: none;
     padding: 0;
+}
+
+#site_nav li{
+    float: right;
 }
 
 .movie_name{

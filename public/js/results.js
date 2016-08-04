@@ -47,5 +47,4 @@
         var movieId = this.id;
         window.location.replace("/movies/" + movieId);
     });
-
 })(jQuery);

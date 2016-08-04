@@ -23,7 +23,11 @@ router.get('/login', function (req, res) {
 });
 
 router.get('/user', function (req, res) {
-	if (req.cookies.next_movie == undefined) res.redirect("/login");
+	if (req.cookies.next_movie == undefined || (new Date(req.cookies.next_movie.expires) < new Date(Date.now()))) {
+		res.redirect("/login");
+		return;
+	}
+
 	users.getUserBySessionId(req.cookies.next_movie).then((userObj) => {
 		if (userObj) {
 			res.render("user/index", {
@@ -41,7 +45,13 @@ router.post('/users', function (req, res) {
 	var obj = req.body;
 	users.addUsersGeneral(obj).then((userObj) => {
 		if (userObj) {
-			res.status(200).send(userObj);
+			var playlistObj = {};
+			playlistObj.title = "My Playlist";
+			playlistObj.user = userObj.profile;
+			playlistObj.playlistMovies = [];
+			playlist.addPlaylistGeneral(playlistObj).then((obj) => {
+				res.status(200).send(userObj);
+			});
 		} else {
 			res.sendStatus(404);
 		}
@@ -61,42 +71,42 @@ router.post('/users/playlist/:title', function (req, res) {
 			}
 		});
 	});
+});
 
-	router.put('/users/:id', function (req, res) {
-		users.updateUserById(req.params.id, req.body).then((userObj) => {
-			if (userObj) {
-				//console.log(userObj);
-				res.status(200).send(userObj);
-			} else {
-				res.sendStatus(404);
-			}
-		});
+router.put('/users/:id', function (req, res) {
+	users.updateUserById(req.params.id, req.body).then((userObj) => {
+		if (userObj) {
+			//console.log(userObj);
+			res.status(200).send(userObj);
+		} else {
+			res.sendStatus(404);
+		}
 	});
+});
 
-	router.delete('/users/:id', function (req, res) {
-		users.deleteUserById(req.params.id).then((userObj) => {
-			if (userObj) {
-				res.status(200).send(userObj);
-			} else {
-				res.sendStatus(404);
-			}
-		});
+router.delete('/users/:id', function (req, res) {
+	users.deleteUserById(req.params.id).then((userObj) => {
+		if (userObj) {
+			res.status(200).send(userObj);
+		} else {
+			res.sendStatus(404);
+		}
 	});
+});
 
-	router.post('/user/login', function (req, res) {
-		var userObj = {};
-		userObj.username = req.body.username;
-		userObj.password = req.body.password;
-		//When to fire the session?
-		users.verifyUser(userObj).then((user) => {
-			if (user != "Users not found") {
-				res.cookie("next_movie", user.sessionId, { expires: new Date(Date.now() + 24 * 3600000) });
-				res.json({ success: true });
-				return;
-			} else {
-				res.json({ success: false, message: "username or password is invalid" });
-			}
-		});
+router.post('/user/login', function (req, res) {
+	var userObj = {};
+	userObj.username = req.body.username;
+	userObj.password = req.body.password;
+	//When to fire the session?
+	users.verifyUser(userObj).then((user) => {
+		if (user != "Users not found") {
+			res.cookie("next_movie", user.sessionId, { expires: new Date(Date.now() + 24 * 3600000), httpOnly: true });
+			res.json({ success: true });
+			return;
+		} else {
+			res.json({ success: false, message: "username or password is invalid" });
+		}
 	});
 });
 

@@ -179,3 +179,4 @@ router.post("/playlist/:movieId", (req, res) => {
 });
 
 module.exports = router;
+
