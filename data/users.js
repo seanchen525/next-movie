@@ -21,20 +21,21 @@ var exportedMethods = {
         });
     },
 
-    addUser(username, name, email) {
+    getUserBySessionId(id) {
         return Users().then((userCollection) => {
-            console.log("Adding user");
-            let userId = uuid.v4();
-            let obj = {
-                _id: userId,
-                profile: {
-                    _id: userId,
-                    username: username,
-                    name: name,
-                    email: email
-                }
-            };
-            console.log(obj);
+            return userCollection.findOne({ sessionId: id }).then((userObj) => {
+                if (!userObj) throw "Users not found";
+                return userObj;
+            }).catch((error) => {
+                return error;
+            });
+        });
+    },
+
+    addUsers(obj) {
+        return Users().then((userCollection) => {
+            obj["_id"] = uuid.v4();
+            obj["profile"]["_id"] = obj["_id"];
             return userCollection.insertOne(obj).then((userObj) => {
                 return userObj.insertedId;
             }).then(newId => {
@@ -65,6 +66,45 @@ var exportedMethods = {
         }).catch((error) => {
             return error;
         })
+    },
+
+    addUser(username, pwd, name, email) {
+        return Users().then((userCollection) => {
+            console.log("Adding user");
+            let userId = uuid.v4();
+            let obj = {
+                _id: userId,
+                hashedPassword: pwd,
+                profile: {
+                    _id: userId,
+                    username: username,
+                    name: name,
+                    email: email
+                }
+            };
+            console.log(obj);
+            return userCollection.insertOne(obj).then((userObj) => {
+                return userObj.insertedId;
+            }).then(newId => {
+                return this.getUserById(newId);
+            }).catch((error) => {
+                console.log("error");
+                return error;
+            });
+        });
+    },
+
+    verifyUser(obj) {
+        return Users().then((userCollection) => {
+            return userCollection.findOne({ $and: [{ "profile.username": obj.username }, { hashedPassword: obj.password }] }).then((userObj) => {
+                if (!userObj) throw "Users not found";
+
+                userObj.sessionId = uuid.v4();
+                return this.updateUserById(userObj._id, userObj);;
+            }).catch((error) => {
+                return error;
+            });
+        });
     }
 
 }

@@ -3,11 +3,11 @@ const router = express.Router();
 const data = require("../data");
 const api = data.api;
 const playlist = data.playlist;
-const user = data.users;
+const users = data.users;
 const profile = data.profile;
 let listId = " ";
 
-router.get("/:playlistId", (req, res) => {
+router.get("/playlist/:playlistId", (req, res) => {
     //get playlist information
     let playlistId = req.params.playlistId;
     listId = playlistId;
@@ -34,7 +34,7 @@ router.get("/:playlistId", (req, res) => {
     });
 });
 
-router.delete("/:playlistId", (req, res) => {
+router.delete("/playlist/:playlistId", (req, res) => {
     //method to clear out playlist
     let playlistId = req.params.playlistId;
     let clearList = playlist.clearPlaylist(playlistId);
@@ -46,7 +46,7 @@ router.delete("/:playlistId", (req, res) => {
 });
 
 
-router.put("/movie/:movieId", (req, res) => {
+router.put("/playlist/movie/:movieId", (req, res) => {
     let movieId = req.params.movieId;
     let markMovie = playlist.checkOffMovie(listId, movieId);
     markMovie.then((result) => {
@@ -56,7 +56,7 @@ router.put("/movie/:movieId", (req, res) => {
     });
 });
 
-router.post("/reviews/:movieId", (req, res) => {
+router.post("/playlist/reviews/:movieId", (req, res) => {
     let movieId = req.params.movieId;
     let reviewData = req.body;
     let postReview = playlist.addMovieReviewToPlaylist(listId, movieId, reviewData);
@@ -69,7 +69,7 @@ router.post("/reviews/:movieId", (req, res) => {
 
 });
 
-router.delete("/reviews/:reviewId", (req, res) => {
+router.delete("/playlist/reviews/:reviewId", (req, res) => {
     //method to clear out playlist
     let reviewId = req.params.reviewId;
     let removeReview = playlist.removeReviewFromPlaylist(listId, reviewId);
@@ -80,7 +80,7 @@ router.delete("/reviews/:reviewId", (req, res) => {
     });
 });
 
-router.put("/title/:playlistId", (req, res) => {
+router.put("/playlist/title/:playlistId", (req, res) => {
     //method to clear out playlist
     let playlistId = req.params.playlistId;
     let newTitle = req.body.title;
@@ -92,7 +92,7 @@ router.put("/title/:playlistId", (req, res) => {
     });
 });
 
-router.get("/reviews/:movieId", (req, res) => {
+router.get("/playlist/reviews/:movieId", (req, res) => {
     let id = req.params.movieId;
     let reviews = api.getMovieReviews(id);
     reviews.then((result) => {
@@ -100,7 +100,7 @@ router.get("/reviews/:movieId", (req, res) => {
     });
 });
 
-router.get("/details/:movieId", (req, res) => {
+router.get("/playlist/details/:movieId", (req, res) => {
     let id = req.params.movieId;
     let details = api.getMovieDetails(id);
     details.then((result) => {
@@ -138,7 +138,7 @@ router.get("/details/:movieId", (req, res) => {
     });
 });
 
-router.delete("/movie/:movieId", (req, res) => {
+router.delete("/playlist/movie/:movieId", (req, res) => {
     let movieId = req.params.movieId;
     let removeMovie = playlist.removeMovieByMovieId(listId, movieId);
     removeMovie.then((result) => {
@@ -149,31 +149,34 @@ router.delete("/movie/:movieId", (req, res) => {
 });
 
 //add movie to playlist
-router.post("/:userId/:movieId", (req, res) => {
+router.post("/playlist/:movieId", (req, res) => {
+    console.log("in add movie");
     let movieId = req.params.movieId;
-    let userId = req.params.userId;
-    //check limit of playlist
-    let playlistInfo = playlist.getPlaylistByUserId(userId);
-    playlistInfo.then((userPlaylist) => {
-        console.log(userPlaylist);
-        if (userPlaylist.playlistMovies.length == 10) {
-            res.json({ success: false, error: "You have reached the maximum of 10 movies in your playlist" });
-        }
-        else {
-            let movie = api.getMovieDetails(movieId);
-            let userId = req.params.userId;
-            movie.then((details) => {
-                console.log(details);
-                let title = details.title;
-                let overview = details.overview;
-                let newList = playlist.addMovieToPlaylist(userPlaylist._id, movieId, title, overview);
-                newList.then((addedMovie) => {
-                    res.json({ success: true });
+    users.getUserBySessionId(req.cookies.next_movie).then((user) => {
+        //check limit of playlist
+        console.log(user);
+        let playlistInfo = playlist.getPlaylistByUserId(user._id);
+        playlistInfo.then((userPlaylist) => {
+            console.log(userPlaylist);
+            if (userPlaylist.playlistMovies.length == 10) {
+                res.json({ success: false, error: "You have reached the maximum of 10 movies in your playlist" });
+            }
+            else {
+                let movie = api.getMovieDetails(movieId);
+                let userId = user._id;
+                movie.then((details) => {
+                    console.log(details);
+                    let title = details.title;
+                    let overview = details.overview;
+                    let newList = playlist.addMovieToPlaylist(userPlaylist._id, movieId, title, overview);
+                    newList.then((addedMovie) => {
+                        res.json({ success: true });
+                    });
+                }).catch((error) => {
+                    res.json({ success: false, error: error });
                 });
-            }).catch((error) => {
-                res.json({ success: false, error: error });
-            });
-        }
+            }
+        });
     }).catch((error) => {
         res.json({ success: false, error: error });
     });

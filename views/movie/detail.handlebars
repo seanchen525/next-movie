@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row"><h1 class="movie_name">{{movie.title}}</h1></div>
+        <div class="row">
+            <div class="col-sm-6">
+                <img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2{{movie.poster_path}}" width="100%" height="100%">
+            </div>
+            <div class="col-sm-6 movie_base_info">
+                <div class="row">
+                    <ul>
+                        <li>Director: {{movie.director}}</li>
+                        <li>Release Date: {{movie.releaseDate}}</li>
+                        <li>Run Time: {{movie.runtime}}min</li>
+                        <li>Rate: {{movie.averageRating}}</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <button type="button" class = "add" class="btn btn-primary" id={{movie.id}}><span class="glyphicon glyphicon-plus-sign"></span>Add to My PlayList</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="description_box">
+            <h2>Description:</h2>
+            <div>{{movie.description}}</div>
+        </div>
+        <div class="cast_box">
+            <h2>Cast:</h2>
+            {{#if movie.cast.length}}
+                <ul class="nav nav-pills" role="tablist">
+                    {{#each movie.cast}}
+                        <li role="presentation"><a href="#">{{this}}</a></li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+
