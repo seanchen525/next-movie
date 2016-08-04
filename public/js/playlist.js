@@ -155,6 +155,4 @@
             }
         });
     });
-
-
 })(jQuery, window.location);

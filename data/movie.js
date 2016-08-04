@@ -29,6 +29,7 @@ var exportedMethods = {
 
     addMovieGeneral(obj) {
         return Movie().then((movieCollection) => {
+            obj["_id"]=uuid.v4();
             return movieCollection.insertOne(obj).then((movieObj) => {
                 return movieObj.insertedId;
             }).then(newId => {

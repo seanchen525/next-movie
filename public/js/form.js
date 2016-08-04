@@ -35,5 +35,4 @@
 
     //     return;
     // });
-
 })(jQuery, window.localStorage, window.location);
