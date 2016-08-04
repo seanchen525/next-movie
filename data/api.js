@@ -20,7 +20,7 @@ let exportedMethods = {
     },
     getMovieDetails(movieId) {
         return new Promise((fulfill, reject) => {
-            https.get(restHost + "/movie/" + movieId + pathTail, function (response) {
+            https.get(restHost + "/movie/" + movieId + pathTail + "&append_to_response=keywords,images,credits,release_dates", function (response) {
                 response.setEncoding('utf8');
                 var body = '';
                 response.on('data', function (d) {

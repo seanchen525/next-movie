@@ -8,10 +8,9 @@
 
     addToPlaylist.click(function () {
         var movieId = this.id;
-
         var addMovie = {
             method: "POST",
-            url: '/playlist/' + userId + '/' + movieId,
+            url: '/playlist/' + movieId,
         };
 
         $.ajax(addMovie).then(function (response) {
@@ -46,10 +45,7 @@
 
     moreDetails.click(function () {
         var movieId = this.id;
-        // // let details;
-        // $.get('/playlist/details/' + movieId, function (data) {
-        //     let details = data;
-        // });
+        window.location.replace("/movies/" + movieId);
     });
 
 })(jQuery);

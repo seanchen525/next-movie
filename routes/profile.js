@@ -6,7 +6,7 @@ const api = data.api;
 const user = data.users;
 let userId = " ";
 
-router.get("/:userId", (req, res) => {
+router.get("/profile/:userId", (req, res) => {
     userId = req.params.userId;
     res.render("profile/preferences", {
         partial: "form-validation"
@@ -14,7 +14,7 @@ router.get("/:userId", (req, res) => {
 });
 
 
-router.post("/:userId", (req, res) => {
+router.post("/profile/:userId", (req, res) => {
     let title = req.body.title;
     let actors = req.body.actors;
     let genres = req.body.genre;

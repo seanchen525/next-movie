@@ -1,14 +1,8 @@
-/*Program Title: app.js
-Author: Kathy Chowaniec
-Course: CS546-WS
-Date: 07/20/2016
-Description:
-This script configures and initializes the express server and express handlebars templating engine
-*/
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const static = express.static(__dirname + '/public');
+const cookieParser = require('cookie-parser');
 
 const configRoutes = require("./routes");
 
@@ -49,6 +43,7 @@ app.use("/public", static);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(rewriteUnsupportedBrowserMethods);
+app.use(cookieParser());
 
 app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');
