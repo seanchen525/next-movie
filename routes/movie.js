@@ -20,6 +20,7 @@ router.get('/movies', function (req, res) {
 	router.get('/movies/:id', function (req, res) {
 		//check movie collection for this movie
 		movies.getMovieById(req.params.id).then((MovieObj) => {
+			console.log(MovieObj);
 			if (MovieObj) {
 				res.render("movie/detail", {
 					movie: MovieObj,
