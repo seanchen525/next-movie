@@ -3,6 +3,7 @@ Movie = mongoCollections.Movie;
 var uuid = require('node-uuid');
 
 var exportedMethods = {
+    //main operations related to movie
     getAllMovie() {
         return Movie().then((movieCollection) => {
             return movieCollection.find({}).toArray();
@@ -21,14 +22,38 @@ var exportedMethods = {
         });
     },
 	
-	addMovie(obj) {
+	addMovieGeneral(obj) {
         return Movie().then((movieCollection) => {
-            obj["_id"]=uuid.v4();
             return movieCollection.insertOne(obj).then((movieObj) => {
                return movieObj.insertedId;
             }).then(newId=>{
 				return this.getMovieById(newId);
 			});
+        });
+    },
+
+    addMovie(title,description,genre,rated,releaseDate,runtime,director,cast,averageRating,keywords) {
+        var movieId=uuid.v4();
+        var obj={
+            _id:movieId,
+            title:title,
+            description:description,
+            genre:genre,
+            rated:rated,
+            releaseDate:releaseDate,
+            runtime:runtime,
+            director:director,
+            cast:cast,
+            averageRating:averageRating,
+            keywords:keywords,
+            allReviews:[]
+        };
+        return Movie().then((movieCollection) => {
+            return movieCollection.insertOne(obj).then((movieObj) => {
+               return movieObj.insertedId;
+            }).then(newId=>{
+                return this.getMovieById(newId);
+            });
         });
     },
 	
@@ -56,7 +81,10 @@ var exportedMethods = {
 		})
 	},
 
-    addReviewToMovie(id,obj) {   //add review to the allreviews array by providing movie id and the review object.Note: the review id should be added in the obj first
+
+    //operations related to review
+
+    addReviewToMovieGeneral(id,obj) {   //add review to the allreviews array by providing movie id and the review object.Note: the review id should be added in the obj first
         return Movie().then((movieCollection) => {
             return movieCollection.update({ _id: id },{$addToSet:{ "allReviews": obj } }).then(function() {
                 return id;
@@ -67,6 +95,27 @@ var exportedMethods = {
             });
         });
     },
+
+    addReviewToMovie(id,poster,rating,date,comment) {   //add review to the allreviews array by providing movie id and the review object.Note: the review id should be added in the obj first
+        var reviewId=uuid.v4();
+        var obj={
+            _id:reviewId,
+            poster:poster,
+            rating:rating,
+            date:date,
+            comment:comment
+        }
+        return Movie().then((movieCollection) => {
+            return movieCollection.update({ _id: id },{$addToSet:{ "allReviews": obj } }).then(function() {
+                return id;
+            }).then(id=>{
+                return this.getMovieById(id);
+            }).catch((error)=>{
+                return {error:error};
+            });
+        });
+    },
+
 
     getReviewByReviewId(mid,rid){     //get the review from the Movie by providing the specified movie id and the review id
         return Movie().then((movieCollection)=>{
@@ -113,6 +162,36 @@ var exportedMethods = {
                 return {error:error};
         });
     },
+
+    //other operations
+
+    updateAverageRating(mid,rating){
+        return Movie().then((movieCollection)=>{
+            return movieCollection.update({ _id:mid}, { $set: { "averageRating": rating} }).then(function() {
+                return mid;
+            }).then((mid)=>{
+                return this.getMovieById(mid).then((reviewObj)=>{
+                    return reviewObj;
+                });
+            }).catch((error)=>{
+                return {error:error};
+            });
+        }).catch((error)=>{
+                return {error:error};
+        });
+    },
+
+    addNewKeywords(id,keyword){
+        return Movie().then((movieCollection) => {
+            return movieCollection.update({ _id: id },{$addToSet:{ "keywords":keyword} }).then(function() {
+                return id;
+            }).then(id=>{
+                return this.getMovieById(id);
+            }).catch((error)=>{
+                return {error:error};
+            });
+        });
+    }
 
 }
 

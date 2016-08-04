@@ -27,7 +27,7 @@
   
   router.post('/playlists', function (req, res) {
   	 var obj=req.body;
-  	 playlist.addPlaylist(obj).then((PlaylistObj)=>{
+  	 playlist.addPlaylistGeneral(obj).then((PlaylistObj)=>{
 		if (PlaylistObj) {
 			res.status(200).send(PlaylistObj);
 		}else{
@@ -58,10 +58,10 @@
   }),
 
   router.post('/playlists/movie/:id', function (req, res) {
-  	 playlist.addMovieToPlaylist(req.params.id,req.body).then((PlaylistObj)=>{
-		if (PlaylistObj) {
+  	 playlist.addMovieToPlaylistAndMovie(req.params.id,req.body).then((movieObj)=>{
+		if (movieObj) {
 			//console.log(PlaylistObj);
-			res.status(200).send(PlaylistObj);
+			res.status(200).send(movieObj);
 		}else{
 			res.sendStatus(404);
 		}
@@ -100,6 +100,17 @@
 		}
 	 });
   }),
+
+  router.post('/playlists/movie/review/:id/:mid', function (req, res) {
+  	 playlist.addMovieReviewToPlaylistAndMovie(req.params.id,req.params.mid,req.body).then((movieObj)=>{
+		if (movieObj) {
+			//console.log(PlaylistObj);
+			res.status(200).send(movieObj);
+		}else{
+			res.sendStatus(404);
+		}
+	 });
+  })
 
 
  

@@ -27,9 +27,18 @@
   
   router.post('/users', function (req, res) {
   	 var obj=req.body;
-	 obj["_id"]=uuid.v4();
-	 obj["profile"]["_id"]= obj["_id"];
-  	 users.addUsers(obj).then((userObj)=>{
+  	 users.addUsersGeneral(obj).then((userObj)=>{
+		if (userObj) {
+			res.status(200).send(userObj);
+		}else{
+			res.sendStatus(404);
+		}
+	 });
+  }),
+
+  router.post('/users/playlist/:title', function (req, res) {
+  	 var obj=req.body;
+  	 users.addUsersAndPlaylist(req.params.title,obj).then((userObj)=>{
 		if (userObj) {
 			res.status(200).send(userObj);
 		}else{
