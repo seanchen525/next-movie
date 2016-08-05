@@ -20,7 +20,6 @@ router.get('/movies', function (req, res) {
 	router.get('/movies/:id', function (req, res) {
 		//check movie collection for this movie
 		movies.getMovieById(req.params.id).then((MovieObj) => {
-			console.log(MovieObj);
 			if (MovieObj) {
 				res.render("movie/detail", {
 					movie: MovieObj,
@@ -76,7 +75,9 @@ router.get('/movies', function (req, res) {
 	}),
 
     router.post('/movies/review/:id', function (req, res) {
-		movies.addReviewToMovie(req.params.id, req.body).then((movieObj) => {
+		var reviewObj = req.body;
+		reviewObj._id = uuid.v4();
+		movies.addReviewToMovieGeneral(req.params.id, reviewObj).then((movieObj) => {
 			if (movieObj) {
 				//console.log(PlaylistObj);
 				res.status(200).send(movieObj);
