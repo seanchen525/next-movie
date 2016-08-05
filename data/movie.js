@@ -318,7 +318,8 @@ var exportedMethods = {
                     movie.releaseDate = rs.release_date;
                     movie.averageRating = rs.vote_average;
                     movie.poster_path = rs.poster_path;
-                    console.log(rs);
+                    movie.allReviews = [];
+
                     var keywordVal = [];
                     for (var i = 0; i < rs.keywords.keywords.length; i++) {
                         keywordVal.push(rs.keywords.keywords[i].name);
