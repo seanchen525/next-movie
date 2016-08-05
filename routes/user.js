@@ -3,7 +3,6 @@
  */
 var express = require('express');
 var users = require('../data/users')
-var playlist = require('../data/playlist')
 var router = express.Router();
 const xss = require('xss');
 
@@ -18,7 +17,6 @@ router.get('/users', function (req, res) {
 });
 
 router.get('/login', function (req, res) {
-	res.cookie("next_movie", "", { expires: new Date(Date.now()), httpOnly: true});
 	res.render("layouts/login", {
 		partial: "jquery-login-scripts"
 	});
@@ -29,6 +27,7 @@ router.get('/user', function (req, res) {
 		res.redirect("/login");
 		return;
 	}
+
 	users.getUserBySessionId(req.cookies.next_movie).then((userObj) => {
 		if (userObj) {
 			res.render("user/index", {
@@ -102,7 +101,7 @@ router.post('/user/login', function (req, res) {
 	//When to fire the session?
 	users.verifyUser(userObj).then((user) => {
 		if (user != "Users not found") {
-			res.cookie("next_movie", user.sessionId, { expires: new Date(Date.now() + 24 * 3600000), httpOnly: true});
+			res.cookie("next_movie", user.sessionId, { expires: new Date(Date.now() + 24 * 3600000), httpOnly: true });
 			res.json({ success: true });
 			return;
 		} else {

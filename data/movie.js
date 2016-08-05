@@ -22,6 +22,7 @@ var exportedMethods = {
                 if (!movieObj) throw "Movie not found";
                 return movieObj;
             }).catch((error) => {
+                console.log("error");
                 throw error;
             });
         });
@@ -29,7 +30,7 @@ var exportedMethods = {
 
     addMovieGeneral(obj) {
         return Movie().then((movieCollection) => {
-            obj["_id"]=uuid.v4();
+            obj["_id"] = uuid.v4();
             return movieCollection.insertOne(obj).then((movieObj) => {
                 return movieObj.insertedId;
             }).then(newId => {
@@ -38,8 +39,8 @@ var exportedMethods = {
         });
     },
 
-    addMovie(title, description, genre, rated, releaseDate, runtime, director, cast, averageRating, keywords) {
-        var movieId = uuid.v4();
+    addMovie(movieId, title, description, genre, rated, releaseDate, runtime, director, cast, averageRating, keywords) {
+        //var movieId = uuid.v4();
         var obj = {
             _id: movieId,
             title: title,
