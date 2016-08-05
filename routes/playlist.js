@@ -13,7 +13,6 @@ router.get("/playlist/:playlistId", (req, res) => {
     let playlistId = req.params.playlistId;
     let info = playlist.getPlaylistById(playlistId);
     info.then((result) => {
-        //  console.log(result);
         let viewed = [];
         let unviewed = [];
         for (var i = 0; i < result.playlistMovies.length; i++) {
@@ -66,8 +65,6 @@ router.post("/playlist/reviews/:movieId", (req, res) => {
             reviewData.poster = user.profile;
             let postReview = playlist.addMovieReviewToPlaylistAndMovie(playlistInfo._id, movieId, reviewData);
             postReview.then((result) => {
-                //also add review to movie collection
-                // movie.addReviewToMovie(movieId, user.profile, reviewData.rating, reviewData.date, reviewData.review).then((review) => {
                 res.json({ success: true, result: result });
             });
         }).catch((error) => {
@@ -174,51 +171,4 @@ router.post("/playlist/:movieId", (req, res) => {
 });
 
 module.exports = router;
-
-// router.get("/playlist/reviews/:movieId", (req, res) => {
-//     let id = req.params.movieId;
-//     let reviews = api.getMovieReviews(id);
-//     reviews.then((result) => {
-//         res.send(result.results);
-//     });
-// });
-
-// router.get("/playlist/details/:movieId", (req, res) => {
-//     let id = req.params.movieId;
-//     let details = api.getMovieDetails(id);
-//     details.then((result) => {
-//         let credits = api.getMovieCredits(id).then((data) => {
-//             let mainCast = [];
-//             for (var i = 0; i < data.cast.length; i++) {
-//                 if (data.cast[i].order <= 6) {
-//                     mainCast.push(data.cast[i].name);
-//                 }
-//             }
-//             let directors = [];
-//             for (var i = 0; i < data.crew.length; i++) {
-//                 if (data.crew[i].job == 'Director') {
-//                     directors.push(data.crew[i].name);
-//                 }
-//             }
-
-//             let genres = [];
-//             for (var i = 0; i < result.genres.length; i++) {
-//                 genres.push(result.genres[i].name);
-//             }
-//             let output = {
-//                 title: result.title,
-//                 date: result.release_date,
-//                 genres: genres,
-//                 overview: result.overview,
-//                 runtime: result.runtime,
-//                 number_votes: result.vote_count,
-//                 average_rating: result.vote_average,
-//                 mainCast: mainCast,
-//                 directors: directors
-//             };
-//             res.send(output);
-//         });
-//     });
-// });
-
 
