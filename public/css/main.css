@@ -148,3 +148,7 @@ button.close{
     margin-left: 8px;
     cursor: pointer;
 }
+
+.text-goes-here{
+    text-align: center;
+}

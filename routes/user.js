@@ -110,4 +110,17 @@ router.post('/user/login', function (req, res) {
 	});
 });
 
+router.post('/user/update_email', function (req, res) {
+	users.getUserBySessionId(req.cookies.next_movie).then((userObj) => {
+		userObj.profile.email = req.body.email;
+		users.updateUserById(userObj._id, userObj).then((newUser) => {
+			if (newUser){
+				res.json({ success: true , email: newUser.profile.email});
+			} 
+		}).catch((error) => {
+            res.json({ success: false, message: error });
+        });
+	});
+});
+
 module.exports = router;
