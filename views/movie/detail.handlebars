@@ -13,13 +13,13 @@
                         <li>Run Time: {{movie.runtime}}min</li>
                         <li>Rate: {{movie.averageRating}}</li>
                     </ul>
-                    <button type="button" class = "add" class="btn btn-primary" id={{movie.id}}><span class="glyphicon glyphicon-plus-sign"></span>Add to My PlayList</button>
+                    <button type="button" class = "add" class="btn btn-primary" id={{movie._id}}><span class="glyphicon glyphicon-plus-sign"></span>Add to My PlayList</button>
                 </div>
             </div>
         </div>
     </div>
-    
 </div>
+
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <div class="description_box">
@@ -32,6 +32,20 @@
                 <ul class="nav nav-pills" role="tablist">
                     {{#each movie.cast}}
                         <li role="presentation"><a href="#">{{this}}</a></li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+        </div>
+        <div class="review_box">
+            <h2>Reviews:</h2>
+            {{#if movie.allReviews.length}}
+                <ul>
+                    {{#each movie.allReviews}}
+                        <li>
+                            <div>Comment: {{this.comment}}</div>
+                            <div>Rate: {{this.rating}}</div>
+                            <div>{{this.poster.name}} Edited, {{this.date}}</div>
+                        </li>
                     {{/each}}
                 </ul>
             {{/if}}
