@@ -248,7 +248,7 @@ var exportedMethods = {
             return playlistCollection.update({ _id: playlistId, "playlistMovies._id": movieId }, { $set: { "playlistMovies.$.review": obj } }).then(function () {
                 return reviewId;
             }).then((id) => {
-                return this.getMovieReview(playlistId, movieId, id);
+                return this.getMovieReview(playlistId, id);
             }).catch((error) => {
                 console.log("error");
                 return { error: error };
@@ -285,31 +285,27 @@ var exportedMethods = {
     },
 
 
-
     removeReviewFromPlaylist(playlistId, reviewId) {
         return Playlist().then((playlistCollection) => {
-            return playlistCollection.updateOne({ _id: playlistId }, {
-                //pull comment that matches the given id
-                $unset: { "playlistMovies.0.review": "" }
+            return playlistCollection.updateOne({ _id: playlistId, "playlistMovies.review._id": reviewId }, {
+                //unset review object
+                $unset: { "playlistMovies.$.review": "" }
             }).then((result) => {
                 if (result.modifiedCount == 0) throw "Could not remove review with id of " + reviewId;
             }).catch((error) => {
                 console.log("error");
-                console.log(error);
                 return { error: error };
 
             });
         });
     },
 
-    getMovieReview(playlistId, movieId, reviewId) {
+    getMovieReview(playlistId, reviewId) {
         return Playlist().then((playlistCollection) => {
-            return playlistCollection.findOne({ _id: playlistId, "playlistMovies._id": movieId }, { "playlistMovies.review": 1 }).then(function (result) {
+            return playlistCollection.findOne({ _id: playlistId, "playlistMovies.review._id": reviewId }, { "playlistMovies.review": 1 }).then(function (result) {
                 if (!result) throw "Review with id " + reviewId + " doesn't exist!";
                 return result.playlistMovies[0].review;
             }).catch((error) => {
-                console.log("error");
-                console.log(error);
                 return { error: error };
 
             });

@@ -25,16 +25,13 @@
 
         if (rating && review) {
             var date = new Date();
-            console.log(date);
-            //   var month = date.getMonth() + 1;
-            //  var formatDate = month + "/" + date.getDay() + "/" + date.getYear();
             var requestConfig = {
                 method: "POST",
                 url: "/playlist/reviews/" + movieId,
                 contentType: 'application/json',
                 data: JSON.stringify({
                     rating: rating,
-                    review: review,
+                    comment: review,
                     date: date
                 })
             };
@@ -85,9 +82,10 @@
     //remove existing review
     $(".remove-review").click(function () {
         let reviewId = this.id;
+        let movieId = $(".movie-item").attr('id');
         var removeReview = {
             method: "DELETE",
-            url: "/playlist/reviews/" + reviewId,
+            url: "/playlist/movie/" + movieId + "/reviews/" + reviewId,
             contentType: 'application/json',
         };
 

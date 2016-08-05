@@ -21,7 +21,7 @@
             <h3>Movies to watch:</h3>
             {{#each unviewed}}
             <ul class="not_viewed">
-                <li>
+                <li id={{this._id}} class="movie-item">
             <input type="checkbox" id= {{this._id}} class="check-off">
             <label for="check-off">Check-Off?</label><br>
             <label for="title" class="movie_title">{{this.title}}</label>
@@ -55,7 +55,7 @@
             <h3>Movies viewed:</h3>
             {{#each viewed}}
             <ul class="viewed">
-                <li>
+                <li id={{this._id}} class="movie-item">
             <label for="title">{{this.title}}</label><br>
             {{#if this.review}}
             <label for="review">Your Review:</label>

@@ -22,6 +22,7 @@ var exportedMethods = {
                 if (!movieObj) throw "Movie not found";
                 return movieObj;
             }).catch((error) => {
+                console.log("error");
                 throw error;
             });
         });
@@ -29,7 +30,7 @@ var exportedMethods = {
 
     addMovieGeneral(obj) {
         return Movie().then((movieCollection) => {
-            obj["_id"]=uuid.v4();
+            obj["_id"] = uuid.v4();
             return movieCollection.insertOne(obj).then((movieObj) => {
                 return movieObj.insertedId;
             }).then(newId => {
@@ -38,8 +39,8 @@ var exportedMethods = {
         });
     },
 
-    addMovie(title, description, genre, rated, releaseDate, runtime, director, cast, averageRating, keywords) {
-        var movieId = uuid.v4();
+    addMovie(movieId, title, description, genre, rated, releaseDate, runtime, director, cast, averageRating, keywords) {
+        //var movieId = uuid.v4();
         var obj = {
             _id: movieId,
             title: title,
@@ -317,7 +318,7 @@ var exportedMethods = {
                     movie.releaseDate = rs.release_date;
                     movie.averageRating = rs.vote_average;
                     movie.poster_path = rs.poster_path;
-
+                    console.log(rs);
                     var keywordVal = [];
                     for (var i = 0; i < rs.keywords.keywords.length; i++) {
                         keywordVal.push(rs.keywords.keywords[i].name);
