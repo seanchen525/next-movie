@@ -147,7 +147,6 @@ var exportedMethods = {
     verifyUser(obj) {
         return Users().then((userCollection) => {
             return userCollection.findOne({ $and: [{ "profile.username": obj.username }, { hashedPassword: obj.password }] }).then((userObj) => {
-                console.log(userObj);
                 if (!userObj) throw "Users not found";
 
                 userObj.sessionId = uuid.v4();

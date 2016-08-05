@@ -61,6 +61,35 @@ var age_rating = ["NR", "G", "PG", "PG-13", "R", "NC-17"];
         });
     });
     
+    $("#email_btn").bind("click", function(){
+        $("#email-error-container")[0].classList.add("hidden");
+        
+        if ($("#email").val() == $("#email").attr("value")){
+            alert("There is no change about email!");
+            return;
+        }
+        
+        var requestConfig = {
+            method: "POST",
+            url: "/user/update_email",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                email: $("#email").val()
+            })
+        };
+        
+        $.ajax(requestConfig).then(function (responseMessage) {
+            if (responseMessage.success){
+                $("#email").attr("value", responseMessage.email);
+                $("#email-result-container")[0].getElementsByClassName("text-goes-here")[0].textContent = "Update success!";
+                $("#email-result-container")[0].classList.remove("hidden");    
+            } else {
+                $("email-error-container")[0].getElementsByClassName("text-goes-here")[0].textContent = "Update failure!";
+                $("email-error-container")[0].classList.remove("hidden");   
+            }
+        });
+    });
+    
 })(window.jQuery);
 
 function filterAttr(dataSet, valStr){ 
