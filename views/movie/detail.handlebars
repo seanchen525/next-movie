@@ -11,7 +11,7 @@
                         <li>Director: {{movie.director}}</li>
                         <li>Release Date: {{movie.releaseDate}}</li>
                         <li>Run Time: {{movie.runtime}}min</li>
-                        <li>Rate: {{movie.averageRating}}</li>
+                        <li>Average Rating from The Movie DB.com:{{movie.averageRating}}/10</li>
                     </ul>
                     <button type="button" class = "add" class="btn btn-primary" id={{movie._id}}><span class="glyphicon glyphicon-plus-sign"></span>Add to My PlayList</button>
                 </div>
@@ -42,8 +42,8 @@
                 <ul>
                     {{#each movie.allReviews}}
                         <li>
-                            <div>Comment: {{this.comment}}</div>
-                            <div>Rate: {{this.rating}}</div>
+                            <div>Comment: "{{this.comment}}"</div>
+                            <div>Rating: {{this.rating}}/5</div>
                             <div>{{this.poster.name}} Edited, {{this.date}}</div>
                         </li>
                     {{/each}}

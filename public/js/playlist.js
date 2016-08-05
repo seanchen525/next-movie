@@ -25,6 +25,9 @@
 
         if (rating && review) {
             var date = new Date();
+            //reformat date in MM/DD/YYYY format
+            var formatDate = (date.getMonth() + 1) + "/" + date.getDay() + "/" + date.getFullYear();
+            console.log(formatDate);
             var requestConfig = {
                 method: "POST",
                 url: "/playlist/reviews/" + movieId,
@@ -32,7 +35,7 @@
                 data: JSON.stringify({
                     rating: rating,
                     comment: review,
-                    date: date
+                    date: formatDate
                 })
             };
 

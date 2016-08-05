@@ -48,11 +48,15 @@ router.delete("/playlist/:playlistId", (req, res) => {
 //CHECK-OFF MOVIE FROM PLAYLIST
 router.put("/playlist/movie/:movieId", (req, res) => {
     let movieId = req.params.movieId;
-    let markMovie = playlist.checkOffMovie(listId, movieId);
-    markMovie.then((result) => {
-        res.json({ success: true });
-    }).catch((error) => {
-        res.json({ success: false, error: error });
+    users.getUserBySessionId(req.cookies.next_movie).then((user) => {
+        playlist.getPlaylistByUserId(user._id).then((playlistInfo) => {
+            let markMovie = playlist.checkOffMovie(playlistInfo._id, movieId);
+            markMovie.then((result) => {
+                res.json({ success: true });
+            }).catch((error) => {
+                res.json({ success: false, error: error });
+            });
+        });
     });
 });
 
@@ -110,11 +114,15 @@ router.put("/playlist/title/:playlistId", (req, res) => {
 //REMOVE MOVIE FROM PLAYLIST
 router.delete("/playlist/movie/:movieId", (req, res) => {
     let movieId = req.params.movieId;
-    let removeMovie = playlist.removeMovieByMovieId(listId, movieId);
-    removeMovie.then((result) => {
-        res.json({ success: true });
-    }).catch((error) => {
-        res.json({ succes: false, error: error });
+    users.getUserBySessionId(req.cookies.next_movie).then((user) => {
+        playlist.getPlaylistByUserId(user._id).then((playlistInfo) => {
+            let removeMovie = playlist.removeMovieByMovieId(playlistInfo._id, movieId);
+            removeMovie.then((result) => {
+                res.json({ success: true });
+            }).catch((error) => {
+                res.json({ succes: false, error: error });
+            });
+        });
     });
 });
 
@@ -125,44 +133,52 @@ router.post("/playlist/:movieId", (req, res) => {
         //check limit of playlist
         let playlistInfo = playlist.getPlaylistByUserId(user._id);
         playlistInfo.then((userPlaylist) => {
-            if (userPlaylist.playlistMovies.length == 10) {
-                res.json({ success: false, error: "You have reached the maximum of 10 movies in your playlist" });
-            }
-            else {
-                //check if movie exists in collection
-                let movieInfo = "";
-                movie.getMovieById(movieId).then((details) => {
-                    if (!details) { //get details using api
-                        api.getMovieDetails(movieId).then((info) => {
-                            movieInfo = info;
-                            //insert movie into movie collection
-                            let addedMovie = movie.addMovie(info._id, info.title, info.description, info.genre, info.rated, info.releaseDate, info.runtime, info.director, info.cast, info.averageRating, info.keywords);
-                            addedMovie.then((result) => {
+            //check if movie already exists in playlist
+            let currentMovies = userPlaylist.playlistMovies;
+            var index = currentMovies.map(function (e) { return e._id; }).indexOf(movieId);
+            if (index == -1) { //movie not in playlist
+                if (userPlaylist.playlistMovies.length == 10) {
+                    res.json({ success: false, error: "You have reached the maximum of 10 movies in your playlist" });
+                }
+                else {
+                    //check if movie exists in collection
+                    let movieInfo = "";
+                    movie.getMovieById(movieId).then((details) => {
+                        if (!details) { //get details using api
+                            api.getMovieDetails(movieId).then((info) => {
+                                movieInfo = info;
+                                //insert movie into movie collection
+                                let addedMovie = movie.addMovie(info._id, info.title, info.description, info.genre, info.rated, info.releaseDate, info.runtime, info.director, info.cast, info.averageRating, info.keywords);
+                                addedMovie.then((result) => {
+                                });
+                            }).catch((error) => {
+                                res.json({ success: false, error: error });
                             });
-                        }).catch((error) => {
-                            res.json({ success: false, error: error });
+                        }
+                        else {
+                            movieInfo = details;
+                        }
+                        let userId = user._id;
+                        let title = movieInfo.title;
+                        let overview;
+                        if (movieInfo.description) {
+                            overview = movieInfo.description;
+                        }
+                        else {
+                            overview = movieInfo.overview;
+                        }
+                        let newList = playlist.addMovieToPlaylist(userPlaylist._id, movieId, title, overview);
+                        newList.then((addedMovie) => {
+                            res.json({ success: true });
                         });
-                    }
-                    else {
-                        movieInfo = details;
-                    }
-                    let userId = user._id;
-                    let title = movieInfo.title;
-                    let overview;
-                    if (movieInfo.description) {
-                        overview = movieInfo.description;
-                    }
-                    else {
-                        overview = movieInfo.overview;
-                    }
-                    let newList = playlist.addMovieToPlaylist(userPlaylist._id, movieId, title, overview);
-                    newList.then((addedMovie) => {
-                        res.json({ success: true });
-                    });
 
-                }).catch((error) => {
-                    res.json({ success: false, error: error });
-                });
+                    }).catch((error) => {
+                        res.json({ success: false, error: error });
+                    });
+                }
+            }
+            else { //movie is already in playlist
+                res.json({ success: false, error: "This movie is already in your playlist" });
             }
         });
     }).catch((error) => {
