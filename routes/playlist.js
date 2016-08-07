@@ -4,34 +4,39 @@ const data = require("../data");
 const api = data.api;
 const playlist = data.playlist;
 const users = data.users;
-const profile = data.profile;
+//const search = data.search;
 const movie = data.movie;
 
-//GET PLAYLIST BY PLAYLSIT ID
-router.get("/playlist/:playlistId", (req, res) => {
+//GET PLAYLIST
+router.get("/playlist", (req, res) => {
     //get playlist information
-    let playlistId = req.params.playlistId;
-    let info = playlist.getPlaylistById(playlistId);
-    info.then((result) => {
-        let viewed = [];
-        let unviewed = [];
-        for (var i = 0; i < result.playlistMovies.length; i++) {
-            if (result.playlistMovies[i].viewed == true) {
-                viewed.push(result.playlistMovies[i]);
-            }
-            else {
-                unviewed.push(result.playlistMovies[i]);
-            }
-        }
-        res.render("playlist/page", {
-            playlist: result,
-            movies: result.playlistMovies,
-            viewed: viewed,
-            unviewed: unviewed,
-            partial: "playlist-script"
+    users.getUserBySessionId(req.cookies.next_movie).then((user) => {
+        playlist.getPlaylistByUserId(user._id).then((playlistInfo) => {
+            // let playlistId = req.params.playlistId;
+            let info = playlist.getPlaylistById(playlistInfo._id);//playlist.getPlaylistById(playlistId);
+            info.then((result) => {
+                let viewed = [];
+                let unviewed = [];
+                for (var i = 0; i < result.playlistMovies.length; i++) {
+                    if (result.playlistMovies[i].viewed == true) {
+                        viewed.push(result.playlistMovies[i]);
+                    }
+                    else {
+                        unviewed.push(result.playlistMovies[i]);
+                    }
+                }
+                res.render("playlist/page", {
+                    playlist: result,
+                    movies: result.playlistMovies,
+                    viewed: viewed,
+                    unviewed: unviewed,
+                    partial: "playlist-script"
+                });
+            });
         });
     });
 });
+
 
 //CLEAR PLAYLIST
 router.delete("/playlist/:playlistId", (req, res) => {

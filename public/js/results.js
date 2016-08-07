@@ -23,26 +23,6 @@
         });
     });
 
-    // readReviews.click(function () {
-    //     var movieId = this.id;
-    //     let allReviews = [];
-    //     $.get('/playlist/reviews/' + movieId, function (data) {
-    //         let reviews = data;
-    //         if (reviews.length > 0) {
-    //             for (var i = 0; i < reviews.length; i++) {
-    //                 let output = {
-    //                     name: reviews[i].author,
-    //                     comment: reviews[i].content
-    //                 }
-    //                 allReviews.push(output);
-    //             }
-    //         }
-    //         console.log(allReviews);
-    //     });
-
-    // });
-
-
     moreDetails.click(function () {
         var movieId = this.id;
         window.location.replace("/movies/" + movieId);

@@ -6,15 +6,14 @@ const api = data.api;
 const user = data.users;
 let userId = " ";
 
-router.get("/profile/:userId", (req, res) => {
-    userId = req.params.userId;
-    res.render("profile/preferences", {
+router.get("/search", (req, res) => {
+    res.render("search/preferences", {
         partial: "form-validation"
     });
 });
 
 
-router.post("/profile/:userId", (req, res) => {
+router.post("/search", (req, res) => {
     let title = req.body.title;
     let actors = req.body.actors;
     let genres = req.body.genre;
@@ -76,9 +75,9 @@ router.post("/profile/:userId", (req, res) => {
         result.then((movies) => {
             let movielist = form.formatReleaseDate(movies.results);
             let total = movies.total_results;
-            res.render("results/movielist", { userId: userId, movies: movielist, total: total, partial: "results-script" });
+            res.render("results/movielist", { movies: movielist, total: total, partial: "results-script" });
         }).catch((e) => {
-            res.render("profile/preferences", {
+            res.render("search/preferences", {
                 title: title, actors: actors, genres: genre, director: director,
                 evaluation: evalution, rating: rating, releaseYear: year, keywords: keywords, error: e, partial: "form-validation"
             });
@@ -89,18 +88,16 @@ router.post("/profile/:userId", (req, res) => {
     else {
         if (directorId) {
             let criteria = api.createSearchString(actorIds, parseGenre, directorId, rating, evaluation, year, keywords);
-            console.log(criteria);
         }
         else {
             let criteria = api.createSearchString(actorIds, parseGenre, directorId, rating, evaluation, year, keywordIds);
-            console.log(criteria);
             let result = api.searchByCriteria(criteria);
             result.then((movies) => {
                 let movielist = form.formatReleaseDate(movies.results);
                 let total = movies.total_results;
-                res.render("results/movielist", { userId: userId, movies: movielist, total: total, partial: "results-script" });
+                res.render("results/movielist", { movies: movielist, total: total, partial: "results-script" });
             }).catch((e) => {
-                res.render("profile/preferences", {
+                res.render("search/preferences", {
                     title: title, actors: actors, genres: genre, director: director,
                     evaluation: evalution, rating: rating, releaseYear: year, keywords: keywords, error: e, partial: "form-validation"
                 });
