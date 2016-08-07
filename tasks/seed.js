@@ -34,4 +34,6 @@ new Promise((fulfill, reject) => {
             movie.addMovieGeneral(movieObj);
         });
     }
+}).then(() => {
+    console.log("Finished seeding db");
 });

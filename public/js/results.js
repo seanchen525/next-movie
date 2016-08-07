@@ -25,6 +25,7 @@
 
     moreDetails.click(function () {
         var movieId = this.id;
+        console.log(movieId);
         window.location.replace("/movies/" + movieId);
     });
 })(jQuery);

@@ -31,6 +31,9 @@ var exportedMethods = {
     addMovieGeneral(obj) {
         return Movie().then((movieCollection) => {
             obj["_id"] = uuid.v4();
+            let date = new Date(obj.releaseDate);
+            let formatDate = (date.getMonth() + 1) + "/" + date.getDay() + "/" + date.getFullYear();
+            obj.releaseDate = formatDate;
             return movieCollection.insertOne(obj).then((movieObj) => {
                 return movieObj.insertedId;
             }).then(newId => {

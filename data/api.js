@@ -35,7 +35,9 @@ let exportedMethods = {
                     movie._id = movieId;
                     movie.title = parsed.title;
                     movie.description = parsed.overview;
-                    movie.releaseDate = parsed.release_date;
+                    let date = new Date(parsed.release_date);
+                    let formatDate = (date.getMonth() + 1) + "/" + date.getDay() + "/" + date.getFullYear();
+                    movie.releaseDate = formatDate;
                     movie.averageRating = parsed.vote_average;
                     movie.poster_path = parsed.poster_path;
 

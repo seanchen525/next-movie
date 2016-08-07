@@ -9,7 +9,8 @@ let exportedMethods = {
             if (!movielist[i].release_date == '') {
                 let parsedDate = Date.parse(movielist[i].release_date);
                 let newDate = new Date(parsedDate);
-                movielist[i].release_date = newDate.toDateString();
+                let formatDate = (newDate.getMonth() + 1) + "/" + newDate.getDay() + "/" + newDate.getFullYear();
+                movielist[i].release_date = formatDate;
             }
         }
         return movielist;

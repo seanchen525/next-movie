@@ -26,18 +26,19 @@ router.get('/movies', function (req, res) {
 					partial: "jquery-detail-scripts"
 				});
 			}
-		}).catch((error) => {
-			//search using api
-			api.getMovieDetails(req.params.id).then((movie) => {
-				if (movie) {
-					res.render("movie/detail", {
-						movie: movie,
-						partial: "jquery-detail-scripts"
-					});
-				}
-			}).catch((error) => {
-				res.sendStatus(404);
-			});
+			else {
+				//search using api
+				api.getMovieDetails(req.params.id).then((movie) => {
+					if (movie) {
+						res.render("movie/detail", {
+							movie: movie,
+							partial: "jquery-detail-scripts"
+						});
+					}
+				}).catch((error) => {
+					res.sendStatus(404);
+				});
+			}
 		});
 	}),
 
